@@ -3,6 +3,10 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from PyQt6.QtWidgets import QWidget, QVBoxLayout
 import numpy as np
 
+# 设置matplotlib中文字体支持
+plt.rcParams['font.sans-serif'] = ['SimHei', 'Microsoft YaHei', 'DejaVu Sans']
+plt.rcParams['axes.unicode_minus'] = False
+
 class CanvasWidget(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)

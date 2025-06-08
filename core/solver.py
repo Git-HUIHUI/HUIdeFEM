@@ -55,7 +55,7 @@ class FemSolver:
             p1, p2, p3 = self.nodes[node_ids[0]], self.nodes[node_ids[1]], self.nodes[node_ids[2]]
             
             # 获取单元的材料属性
-            if i >= len(self.mesh['element_attributes']) or not self.mesh['element_attributes'][i]:
+            if i >= len(self.mesh['element_attributes']) or len(self.mesh['element_attributes'][i]) == 0:
                 # 如果没有材料属性，使用第一个可用材料
                 if mat_id_map:
                     material = list(mat_id_map.values())[0]

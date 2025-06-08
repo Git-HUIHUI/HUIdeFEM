@@ -12,10 +12,11 @@ class AppController(QObject):
     computation_started = pyqtSignal()
     computation_finished = pyqtSignal(bool, str) # success: bool, message: str
     
-    def __init__(self):
+    def __init__(self, main_window=None):
         super().__init__()
         self.problem = ProblemDefinition()
         self.result = FemResult()
+        self.main_window = main_window
 
     def update_problem_from_dict(self, data):
         if data:
@@ -36,8 +37,9 @@ class AppController(QObject):
         self.computation_started.emit()
         
         # 1. 网格剖分
-        # 在 run_analysis 方法中
-        mesh = create_mesh(self.problem, 'pq30a10')  # 将面积从1增加到10
+        # 获取用户设置的网格参数
+        mesh_options = self.main_window.input_panel.get_mesh_options()
+        mesh = create_mesh(self.problem, mesh_options)
         if mesh is None:
             self.computation_finished.emit(False, "网格生成失败，请检查几何定义。")
             return

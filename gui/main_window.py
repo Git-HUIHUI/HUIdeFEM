@@ -165,7 +165,13 @@ class MainWindow(QMainWindow):
             if reply != QMessageBox.StandardButton.Yes:
                 return
             
-            # 加载材料数据
+            # 先加载到输入面板
+            self.input_panel.load_data_from_dict(case_data)
+            
+            # 更新界面（这会调用update_problem_from_dict）
+            self._update_all()
+            
+            # 最后加载材料数据，确保不被覆盖
             if 'materials' in case_data:
                 from core.fem_model import Material
                 materials_dict = {}
@@ -174,16 +180,11 @@ class MainWindow(QMainWindow):
                         id=mat_data['id'],
                         name=name,
                         elastic_modulus=mat_data['elastic_modulus'],
-                        poisson_ratio=mat_data['poisson_ratio']
+                        poisson_ratio=mat_data['poisson_ratio'],
+                        unit_weight=mat_data.get('unit_weight', 18000.0)
                     )
                     materials_dict[name] = material
                 self.controller.update_materials(materials_dict)
-            
-            # 加载到输入面板
-            self.input_panel.load_data_from_dict(case_data)
-            
-            # 更新界面
-            self._update_all()
             self.statusBar().showMessage("预设案例加载成功！")
             
         except Exception as e:

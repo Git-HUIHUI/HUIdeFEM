@@ -20,7 +20,10 @@ def main():
     # 将控制器实例传递给主窗口，以便UI可以与之交互。
     window = MainWindow(controller)
     
-    # 3. 显示主窗口
+    # 3. 将主窗口引用传递给控制器
+    controller.main_window = window
+    
+    # 4. 显示主窗口
     window.show()
 
     # 启动Qt事件循环

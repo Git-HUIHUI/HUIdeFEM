@@ -11,6 +11,7 @@ class Material:
     name: str = "Default Material"
     elastic_modulus: float = 2.0e7  # 弹性模量 E, 单位: 帕斯卡 (Pa)
     poisson_ratio: float = 0.3      # 泊松比 ν, 无量纲
+    unit_weight: float = 18000.0    # 重度, 单位: 牛顿/立方米 (N/m³)
 
 @dataclass
 class ProblemDefinition:

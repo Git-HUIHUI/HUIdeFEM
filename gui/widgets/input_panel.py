@@ -1,6 +1,7 @@
 from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QGroupBox, QTableWidget, QComboBox,
                              QTableWidgetItem, QPushButton, QHBoxLayout, 
-                             QHeaderView, QAbstractItemView, QTabWidget)
+                             QHeaderView, QAbstractItemView, QTabWidget, QLabel,
+                             QLineEdit, QFormLayout)
 from PyQt6.QtCore import Qt, pyqtSignal
 
 class InputPanel(QWidget):
@@ -30,6 +31,7 @@ class InputPanel(QWidget):
         regions_widget, self.regions_table = self._create_tab_page("定义区域", ["区域点 X", "区域点 Y", "材料"])
         bc_widget, self.bc_table = self._create_tab_page("边界条件", ["线段 ID", "约束类型", "荷载 Q (N/m)"])
         targets_widget, self.targets_table = self._create_tab_page("目标点", ["点名称", "X 坐标", "Y 坐标"])
+        mesh_widget = self._create_mesh_settings_page()
 
         # 添加选项卡页面
         self.tab_widget.addTab(vertices_widget, "1. 顶点")
@@ -37,6 +39,7 @@ class InputPanel(QWidget):
         self.tab_widget.addTab(regions_widget, "3. 区域")
         self.tab_widget.addTab(bc_widget, "4. 边界")
         self.tab_widget.addTab(targets_widget, "5. 目标点")
+        self.tab_widget.addTab(mesh_widget, "6. 网格设置")
 
         # 连接按钮事件
         vertices_widget.findChild(QPushButton, "add_button").clicked.connect(self._add_vertex_row)
@@ -76,7 +79,7 @@ class InputPanel(QWidget):
         font = table.font()
         font.setPointSize(10)
         table.setFont(font)
-
+    
         # 创建按钮布局
         buttons_layout = QHBoxLayout()
         add_btn = QPushButton("+ 添加", objectName="add_button")
@@ -98,7 +101,7 @@ class InputPanel(QWidget):
         layout.addWidget(table)
         layout.addLayout(buttons_layout)
         
-        return widget, table
+        return widget, table  # 返回元组而不是单个widget
 
     # --- 为每个“添加”按钮设置的专用槽函数 ---
     def _add_vertex_row(self):
@@ -183,13 +186,11 @@ class InputPanel(QWidget):
         try:
             data['vertices'] = [(float(self.vertices_table.item(r, 1).text()), float(self.vertices_table.item(r, 2).text())) for r in range(self.vertices_table.rowCount())]
             data['segments'] = [(int(self.segments_table.item(r, 1).text()), int(self.segments_table.item(r, 2).text())) for r in range(self.segments_table.rowCount())]
-            materials = self.controller.problem.materials
-            mat_name_to_id = {name: mat.id for name, mat in materials.items()}
             data['regions'] = []
             for r in range(self.regions_table.rowCount()):
                 mat_name = self.regions_table.cellWidget(r, 2).currentText()
-                if mat_name in mat_name_to_id:
-                    data['regions'].append((float(self.regions_table.item(r, 0).text()), float(self.regions_table.item(r, 1).text()), mat_name_to_id[mat_name]))
+                # 保持材料名称而不是转换为ID，让preprocessor处理转换
+                data['regions'].append((float(self.regions_table.item(r, 0).text()), float(self.regions_table.item(r, 1).text()), mat_name))
             data['constraints'], data['loads'] = {}, {}
             for r in range(self.bc_table.rowCount()):
                 seg_id, const_type, load_val = int(self.bc_table.item(r, 0).text()), self.bc_table.cellWidget(r, 1).currentText(), float(self.bc_table.item(r, 2).text())
@@ -228,13 +229,22 @@ class InputPanel(QWidget):
             
             # 加载区域数据
             if 'regions' in data:
+                # 如果数据中包含材料信息，先临时获取材料名称列表
+                material_names = []
+                if 'materials' in data:
+                    material_names = list(data['materials'].keys())
+                
                 for i, region in enumerate(data['regions']):
                     self.regions_table.insertRow(i)
                     if len(region) >= 3:
                         self.regions_table.setItem(i, 0, QTableWidgetItem(str(region[0])))
                         self.regions_table.setItem(i, 1, QTableWidgetItem(str(region[1])))
                         combo = QComboBox()
-                        self.update_material_options_for_combo(combo)
+                        # 如果有材料名称列表，先添加到combo中
+                        if material_names:
+                            combo.addItems(material_names)
+                        else:
+                            self.update_material_options_for_combo(combo)
                         # 如果region[2]是材料名称字符串，直接设置
                         if isinstance(region[2], str):
                             combo.setCurrentText(region[2])
@@ -275,4 +285,57 @@ class InputPanel(QWidget):
             
         except Exception as e:
             print(f"加载数据时出错: {e}")
+    
+    def _create_mesh_settings_page(self):
+        """创建网格设置页面。"""
+        widget = QWidget()
+        layout = QVBoxLayout(widget)
+        layout.setSpacing(15)
+        layout.setContentsMargins(15, 15, 15, 15)
+        
+        # 创建表单布局
+        form_layout = QFormLayout()
+        
+        # 网格面积设置
+        self.mesh_area_input = QLineEdit()
+        self.mesh_area_input.setText("10")  # 默认值
+        self.mesh_area_input.setPlaceholderText("输入最大单元面积 (例如: 10)")
+        self.mesh_area_input.textChanged.connect(self.data_changed.emit)
+        
+        # 添加说明标签
+        area_label = QLabel("最大单元面积:")
+        area_help = QLabel("较小的值会生成更密的网格，计算更精确但耗时更长")
+        area_help.setStyleSheet("color: gray; font-size: 9pt;")
+        
+        form_layout.addRow(area_label, self.mesh_area_input)
+        form_layout.addRow("", area_help)
+        
+        # 质量设置
+        self.mesh_quality_input = QLineEdit()
+        self.mesh_quality_input.setText("30")  # 默认值
+        self.mesh_quality_input.setPlaceholderText("输入最小角度 (例如: 30)")
+        self.mesh_quality_input.textChanged.connect(self.data_changed.emit)
+        
+        quality_label = QLabel("最小角度 (度):")
+        quality_help = QLabel("控制网格质量，建议值为20-35度")
+        quality_help.setStyleSheet("color: gray; font-size: 9pt;")
+        
+        form_layout.addRow(quality_label, self.mesh_quality_input)
+        form_layout.addRow("", quality_help)
+        
+        layout.addLayout(form_layout)
+        layout.addStretch()  # 添加弹性空间
+        
+        return widget
+    
+    def get_mesh_options(self):
+        """获取用户设置的网格参数。"""
+        try:
+            area = float(self.mesh_area_input.text()) if hasattr(self, 'mesh_area_input') and self.mesh_area_input.text() else 10.0
+            quality = int(self.mesh_quality_input.text()) if hasattr(self, 'mesh_quality_input') and self.mesh_quality_input.text() else 30
+            # 添加'A'标志来启用区域属性生成
+            return f'pq{quality}a{area}A'
+        except ValueError:
+            # 如果输入无效，返回默认值
+            return 'pq30a10A'  # 也要添加A标志
             raise e

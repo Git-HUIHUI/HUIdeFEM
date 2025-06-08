@@ -37,8 +37,12 @@ def create_mesh(problem: ProblemDefinition, mesh_opts='pq30a0.1'):
                 regions_for_tri.append([r[0], r[1], material_id, -1])
             else:
                 print(f"警告: 区域中的材料 '{material_name}' 未在材料库中找到")
-                # 使用默认材料ID
-                default_id = 1
+                # 使用第一个可用材料的ID，如果没有材料则使用1
+                if problem.materials:
+                    default_material = list(problem.materials.values())[0]
+                    default_id = default_material.id
+                else:
+                    default_id = 1
                 regions_for_tri.append([r[0], r[1], default_id, -1])
         geom['regions'] = regions_for_tri
 
@@ -46,6 +50,12 @@ def create_mesh(problem: ProblemDefinition, mesh_opts='pq30a0.1'):
     try:
         mesh = tr.triangulate(geom, mesh_opts)
         print("网格生成成功！")
+        # 在网格生成后添加
+        print(f"调试: 定义的区域数据: {regions_for_tri}")
+        triangle_attrs = mesh.get('triangle_attributes', [])
+        print(f"调试: triangle生成的属性数量: {len(triangle_attrs)}")
+        if len(triangle_attrs) > 0:
+            print(f"调试: 前10个单元的属性: {triangle_attrs[:10]}")
         # 为每个单元附加材料属性
         if 'regions' in geom:
             # triangle的'triangle_attributes'字段存储了每个单元的区域属性
@@ -64,3 +74,6 @@ def create_mesh(problem: ProblemDefinition, mesh_opts='pq30a0.1'):
     except Exception as e:
         print(f"网格生成失败: {e}")
         return None
+
+# 将 'pq30a10.0' 改为 'pq30a10.0A'
+mesh_opts = 'pq30a10.0A'  # A标志启用区域属性
