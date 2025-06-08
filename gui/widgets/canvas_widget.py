@@ -67,6 +67,17 @@ class CanvasWidget(QWidget):
                     if "固定" in const_type: self.ax.plot(mid[0], mid[1], 'ks', ms=7)
                     elif "X向" in const_type: self.ax.plot(mid[0], mid[1], 'k>', ms=7)
                     elif "Y向" in const_type: self.ax.plot(mid[0], mid[1], 'k^', ms=7)
+        
+        # 绘制荷载箭头（匀布荷载形式）
+        if problem_def.loads:
+            self._draw_distributed_loads(problem_def, verts, segs)
+            
+        # 绘制目标点
+        if problem_def.target_points:
+            for name, (x, y) in problem_def.target_points.items():
+                self.ax.plot(x, y, 'ro', markersize=8, markeredgecolor='black', markeredgewidth=1, label='目标点' if name == list(problem_def.target_points.keys())[0] else "", zorder=6)
+                self.ax.text(x, y, f' {name}', c='red', fontsize=10, fontweight='bold')
+            
         self._setup_plot()
         self.canvas.draw()
     
@@ -142,3 +153,47 @@ class CanvasWidget(QWidget):
         self._create_axes()
         self._setup_plot()
         self.canvas.draw()
+
+    def _draw_distributed_loads(self, problem_def, verts, segs):
+        """绘制匀布荷载箭头"""
+        for seg_id, load_value in problem_def.loads.items():
+            if seg_id < len(segs) and max(segs[seg_id]) < len(verts):
+                p1, p2 = verts[segs[seg_id][0]], verts[segs[seg_id][1]]
+                
+                # 计算线段的方向向量和法向量
+                seg_vec = np.array(p2) - np.array(p1)
+                seg_length = np.linalg.norm(seg_vec)
+                seg_unit = seg_vec / seg_length
+                
+                # 计算垂直于线段的单位法向量（向上为正）
+                normal_vec = np.array([-seg_unit[1], seg_unit[0]])
+                
+                # 根据荷载值确定箭头方向和长度
+                # 负荷载向下，正荷载向上
+                arrow_direction = -np.sign(load_value) * normal_vec
+                
+                # 计算箭头长度（基于荷载大小和模型尺寸）
+                model_size = max(np.max(verts[:, 0]) - np.min(verts[:, 0]), 
+                               np.max(verts[:, 1]) - np.min(verts[:, 1]))
+                max_arrow_length = model_size * 0.1  # 最大箭头长度为模型尺寸的10%
+                
+                # 根据荷载值计算箭头长度（可以根据需要调整比例）
+                arrow_length = min(abs(load_value) / 10000.0, max_arrow_length)
+                if arrow_length < model_size * 0.02:  # 最小箭头长度
+                    arrow_length = model_size * 0.02
+                
+                # 沿线段均匀分布箭头
+                num_arrows = max(3, int(seg_length / (model_size * 0.05)))  # 根据线段长度确定箭头数量
+                
+                for i in range(num_arrows):
+                    # 计算箭头起点位置
+                    t = (i + 0.5) / num_arrows  # 在线段上的参数位置
+                    arrow_start = np.array(p1) + t * seg_vec
+                    
+                    # 计算箭头终点位置
+                    arrow_end = arrow_start + arrow_direction * arrow_length
+                    
+                    # 绘制箭头
+                    self.ax.annotate('', xy=arrow_end, xytext=arrow_start,
+                                   arrowprops=dict(arrowstyle='->', color='orange', lw=1.5),
+                                   zorder=4)
