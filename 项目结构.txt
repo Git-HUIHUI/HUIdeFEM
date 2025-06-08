@@ -1,0 +1,41 @@
+SlopeFEM_2D/
+│
+├── main.py                 # 程序的唯一入口，负责启动整个应用
+├── requirements.txt        # 列出所有Python依赖库 (PyQt6, numpy, triangle, matplotlib)
+├── README.md               # 项目说明文档，介绍如何安装和运行
+│
+├── core/                   # 存放所有与有限元计算相关的核心后端逻辑
+│   ├── __init__.py
+│   ├── fem_model.py        # 定义核心数据类 (如节点, 单元, 材料, 边界条件)
+│   ├── preprocessor.py     # 前处理器：负责调用`triangle`库进行网格剖分
+│   ├── solver.py           # 求解器：有限元计算的核心，组装矩阵、求解方程
+│   ├── postprocessor.py    # 后处理器：根据位移计算应力、应变等派生结果
+│   └── utils.py            # 存放一些通用的工具函数 (如几何判断函数)
+│
+├── gui/                    # 存放所有与PyQt6用户界面相关的代码
+│   ├── __init__.py
+│   ├── main_window.py      # 主窗口：搭建应用框架，整合所有UI组件
+│   ├── app_controller.py   # 控制器：连接UI操作和后端核心逻辑的桥梁
+│   │
+│   ├── widgets/            # 存放自定义的、可复用的UI控件
+│   │   ├── __init__.py
+│   │   ├── canvas_widget.py  # 绘图画布：嵌入matplotlib，用于显示模型和云图
+│   │   ├── input_panel.py    # 输入面板：包含用于输入顶点、线段、区域的表格
+│   │   └── results_panel.py  # 结果面板：显示A、B点位移等数值结果
+│   │
+│   └── dialogs/            # 存放各种对话框窗口
+│       ├── __init__.py
+│       └── material_dialog.py # 材料库对话框：用于定义和编辑材料属性
+│
+├── resources/              # 存放应用的静态资源
+│   └── icons/              # 存放工具栏、按钮等使用的图标文件
+│       ├── calculate.png
+│       ├── open_file.png
+│       └── save_file.png
+│
+├── examples/               # 存放项目示例文件
+│   └── slope_problem.json  # PPT中例题的完整输入数据，方便一键加载测试
+│
+└── tests/                  # 存放单元测试代码 (可选，但强烈推荐)
+    ├── __init__.py
+    └── test_solver.py      # 针对一个极简模型，验证求解器计算结果的准确性
