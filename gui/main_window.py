@@ -70,7 +70,14 @@ class MainWindow(QMainWindow):
         # 绘图控制
         plot_controls = QHBoxLayout()
         self.plot_selector = QComboBox()
-        self.plot_selector.addItems(["模型预览", "Von Mises 应力", "水平位移", "竖直位移"])
+        self.plot_selector.addItems([
+            "模型预览", 
+            "Von Mises 应力", 
+            "水平位移 (原始)", 
+            "竖直位移 (原始)",
+            "水平位移 (放大)", 
+            "竖直位移 (放大)"
+        ])
         plot_controls.addWidget(QLabel("显示内容:"))
         plot_controls.addWidget(self.plot_selector)
         plot_controls.addStretch()
@@ -131,7 +138,13 @@ class MainWindow(QMainWindow):
             if not self.controller.result.mesh:
                 self.canvas.clear_plot()
                 return
-            plot_map = { "Von Mises 应力": "stress", "水平位移": "disp_x", "竖直位移": "disp_y" }
+            plot_map = { 
+                "Von Mises 应力": "stress", 
+                "水平位移 (原始)": "disp_x_original", 
+                "竖直位移 (原始)": "disp_y_original",
+                "水平位移 (放大)": "disp_x", 
+                "竖直位移 (放大)": "disp_y" 
+            }
             self.canvas.plot_result(self.controller.result, plot_map.get(plot_type_text))
 
     def _open_material_dialog(self):

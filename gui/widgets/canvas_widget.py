@@ -59,31 +59,59 @@ class CanvasWidget(QWidget):
             try:
                 self.colorbar.remove()
             except (AttributeError, ValueError):
-                pass  # 忽略移除colorbar时的错误
+                pass
             self.colorbar = None
             
         mesh = result.mesh
         nodes = mesh['vertices']
         elements = mesh['triangles']
         
+        # 判断是否需要放大显示
+        use_deformation = plot_type in ['disp_x', 'disp_y', 'disp_x_original', 'disp_y_original']
+        use_scale = plot_type in ['disp_x', 'disp_y']  # 只有非原始模式才放大
+        
+        # 计算变形放大系数
+        scale_factor = 1.0
+        if use_deformation and use_scale and len(result.displacements) > 0:
+            max_displacement = np.max(np.abs(result.displacements))
+            if max_displacement > 0:
+                # 根据模型尺寸自动计算放大系数
+                model_size = max(np.max(nodes[:, 0]) - np.min(nodes[:, 0]), 
+                               np.max(nodes[:, 1]) - np.min(nodes[:, 1]))
+                scale_factor = model_size * 0.1 / max_displacement  # 变形显示为模型尺寸的10%
+        
+        # 计算变形后的节点坐标
+        if use_deformation and len(result.displacements) > 0:
+            deformed_nodes = nodes + scale_factor * result.displacements
+        else:
+            deformed_nodes = nodes
+        
         title, values, unit = "", None, ""
         if plot_type == 'stress':
             title, values, unit = "Von Mises 应力云图", result.stresses, "Pa"
         elif plot_type == 'disp_x':
-            title, values, unit = "水平位移 (X)", result.displacements[:, 0], "m"
+            title, values, unit = f"水平位移 (X) [放大{scale_factor:.0f}倍]", result.displacements[:, 0], "m"
         elif plot_type == 'disp_y':
-            title, values, unit = "竖直位移 (Y)", result.displacements[:, 1], "m"
+            title, values, unit = f"竖直位移 (Y) [放大{scale_factor:.0f}倍]", result.displacements[:, 1], "m"
+        elif plot_type == 'disp_x_original':
+            title, values, unit = "水平位移 (X) [原始尺寸]", result.displacements[:, 0], "m"
+        elif plot_type == 'disp_y_original':
+            title, values, unit = "竖直位移 (Y) [原始尺寸]", result.displacements[:, 1], "m"
         
         # 绘制云图
         if values is not None:
             if values.ndim == 1 and len(values) == len(elements): # 单元数据
-                cax = self.ax.tripcolor(nodes[:, 0], nodes[:, 1], elements, facecolors=values, cmap='jet')
+                cax = self.ax.tripcolor(deformed_nodes[:, 0], deformed_nodes[:, 1], elements, facecolors=values, cmap='jet')
             elif values.ndim == 1 and len(values) == len(nodes): # 节点数据
-                cax = self.ax.tricontourf(nodes[:, 0], nodes[:, 1], elements, values, cmap='jet', levels=20)
+                cax = self.ax.tricontourf(deformed_nodes[:, 0], deformed_nodes[:, 1], elements, values, cmap='jet', levels=20)
             self.colorbar = self.figure.colorbar(cax, ax=self.ax, label=f"{title} ({unit})")
         
-        # 叠加网格
-        self.ax.triplot(nodes[:, 0], nodes[:, 1], elements, 'k-', linewidth=0.5, alpha=0.5)
+        # 叠加网格 - 显示变形后的形状
+        self.ax.triplot(deformed_nodes[:, 0], deformed_nodes[:, 1], elements, 'k-', linewidth=0.5, alpha=0.5)
+        
+        # 如果是放大位移图，额外显示原始形状作为对比
+        if use_deformation and use_scale and scale_factor > 1:
+            self.ax.triplot(nodes[:, 0], nodes[:, 1], elements, color='gray', linewidth=0.3, alpha=0.3, linestyle='--')
 
         self._setup_plot(title=title)
         self.canvas.draw()
