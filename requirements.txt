@@ -1,0 +1,15 @@
+# GUI框架
+PyQt6>=6.4.0
+
+# 科学计算
+numpy>=1.21.0
+scipy>=1.7.0
+
+# 可视化
+matplotlib>=3.5.0
+
+# 网格剖分
+triangle>=20220202
+
+# 数据处理
+dataclasses>=0.6; python_version<"3.7"
