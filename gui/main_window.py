@@ -2,6 +2,8 @@ from PyQt6.QtWidgets import (QMainWindow, QSplitter, QMessageBox, QWidget,
                              QVBoxLayout, QHBoxLayout, QPushButton, QComboBox, QLabel)
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QAction
+import json
+import os
 
 from gui.widgets.input_panel import InputPanel
 from gui.widgets.canvas_widget import CanvasWidget
@@ -24,6 +26,7 @@ class MainWindow(QMainWindow):
 
     def _create_actions(self):
         self.calc_action = QAction("计算", self)
+        self.load_example_action = QAction("加载预设案例", self)
         self.exit_action = QAction("退出", self)
         self.material_action = QAction("材料库...", self)
         self.about_action = QAction("关于", self)
@@ -31,6 +34,8 @@ class MainWindow(QMainWindow):
     def _create_menu_bar(self):
         menu_bar = self.menuBar()
         file_menu = menu_bar.addMenu("文件")
+        file_menu.addAction(self.load_example_action)
+        file_menu.addSeparator()
         file_menu.addAction(self.exit_action)
         define_menu = menu_bar.addMenu("定义")
         define_menu.addAction(self.material_action)
@@ -41,6 +46,8 @@ class MainWindow(QMainWindow):
 
     def _create_tool_bar(self):
         toolbar = self.addToolBar("主要工具")
+        toolbar.addAction(self.load_example_action)
+        toolbar.addSeparator()
         toolbar.addAction(self.material_action)
         toolbar.addAction(self.calc_action)
 
@@ -86,6 +93,7 @@ class MainWindow(QMainWindow):
     def _create_connections(self):
         self.input_panel.data_changed.connect(self._update_all)
         self.calc_action.triggered.connect(self._run_analysis)
+        self.load_example_action.triggered.connect(self._load_example_case)
         self.controller.computation_started.connect(lambda: self.statusBar().showMessage("正在计算，请稍候..."))
         self.controller.computation_finished.connect(self._on_computation_finished)
         self.plot_selector.currentTextChanged.connect(self._update_plot_view)
@@ -132,3 +140,51 @@ class MainWindow(QMainWindow):
             self.controller.update_materials(dialog.get_materials())
             self.input_panel.update_all_material_options()
             self._update_all()
+    
+    def _load_example_case(self):
+        """加载预设的边坡分析案例"""
+        try:
+            # 获取例题文件路径
+            example_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'examples', 'slope_problem.json')
+            
+            if not os.path.exists(example_file):
+                QMessageBox.warning(self, "警告", "预设案例文件不存在！")
+                return
+            
+            # 读取JSON文件
+            with open(example_file, 'r', encoding='utf-8') as f:
+                case_data = json.load(f)
+            
+            # 确认是否加载
+            reply = QMessageBox.question(self, "加载预设案例", 
+                                       f"是否加载预设案例：{case_data.get('name', '未命名案例')}？\n\n"
+                                       f"描述：{case_data.get('description', '无描述')}\n\n"
+                                       "这将清除当前所有输入数据。",
+                                       QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+            
+            if reply != QMessageBox.StandardButton.Yes:
+                return
+            
+            # 加载材料数据
+            if 'materials' in case_data:
+                from core.fem_model import Material
+                materials_dict = {}
+                for name, mat_data in case_data['materials'].items():
+                    material = Material(
+                        id=mat_data['id'],
+                        name=name,
+                        elastic_modulus=mat_data['elastic_modulus'],
+                        poisson_ratio=mat_data['poisson_ratio']
+                    )
+                    materials_dict[name] = material
+                self.controller.update_materials(materials_dict)
+            
+            # 加载到输入面板
+            self.input_panel.load_data_from_dict(case_data)
+            
+            # 更新界面
+            self._update_all()
+            self.statusBar().showMessage("预设案例加载成功！")
+            
+        except Exception as e:
+            QMessageBox.critical(self, "错误", f"加载预设案例失败：{str(e)}")

@@ -28,7 +28,18 @@ def create_mesh(problem: ProblemDefinition, mesh_opts='pq30a0.1'):
         # triangle需要区域属性，这里我们将材料ID作为属性
         # triangle区域格式: [x, y, attribute, max_area]
         # 我们暂时不使用最大面积约束，所以设为-1
-        regions_for_tri = [[r[0], r[1], r[2], -1] for r in problem.regions]
+        regions_for_tri = []
+        for r in problem.regions:
+            # r[2] 是材料名称，需要转换为材料ID
+            material_name = r[2]
+            if material_name in problem.materials:
+                material_id = problem.materials[material_name].id
+                regions_for_tri.append([r[0], r[1], material_id, -1])
+            else:
+                print(f"警告: 区域中的材料 '{material_name}' 未在材料库中找到")
+                # 使用默认材料ID
+                default_id = 1
+                regions_for_tri.append([r[0], r[1], default_id, -1])
         geom['regions'] = regions_for_tri
 
     print(f"正在使用选项 '{mesh_opts}' 生成网格...")

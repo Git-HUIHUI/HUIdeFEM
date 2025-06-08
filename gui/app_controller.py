@@ -36,7 +36,8 @@ class AppController(QObject):
         self.computation_started.emit()
         
         # 1. 网格剖分
-        mesh = create_mesh(self.problem, 'pq30a1') # 'a1'表示最大单元面积为1
+        # 在 run_analysis 方法中
+        mesh = create_mesh(self.problem, 'pq30a10')  # 将面积从1增加到10
         if mesh is None:
             self.computation_finished.emit(False, "网格生成失败，请检查几何定义。")
             return
