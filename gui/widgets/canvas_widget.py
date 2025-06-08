@@ -1,7 +1,9 @@
-import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from PyQt6.QtWidgets import QWidget, QVBoxLayout
 import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.gridspec import GridSpec
 
 # 设置matplotlib中文字体支持
 plt.rcParams['font.sans-serif'] = ['SimHei', 'Microsoft YaHei', 'DejaVu Sans']
@@ -10,14 +12,26 @@ plt.rcParams['axes.unicode_minus'] = False
 class CanvasWidget(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.figure, self.ax = plt.subplots()
+        self.figure = Figure(figsize=(10, 8))
         self.canvas = FigureCanvas(self.figure)
-        self.colorbar = None  # 用于跟踪当前的colorbar
+        self.ax = None
+        self.colorbar = None
         layout = QVBoxLayout(self)
         layout.addWidget(self.canvas)
         layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(layout)
+        self._create_axes()
         self._setup_plot()
+
+    def _create_axes(self):
+        """创建固定布局的坐标轴"""
+        self.figure.clear()
+        # 使用GridSpec创建固定布局，为colorbar预留空间
+        gs = GridSpec(1, 2, figure=self.figure, width_ratios=[1, 0.05], wspace=0.1)
+        self.ax = self.figure.add_subplot(gs[0])
+        self.cbar_ax = self.figure.add_subplot(gs[1])
+        self.cbar_ax.set_visible(False)  # 初始时隐藏colorbar轴
+        self.colorbar = None
 
     def _setup_plot(self, title="模型预览"):
         self.ax.set_aspect('equal', adjustable='box')
@@ -29,6 +43,10 @@ class CanvasWidget(QWidget):
 
     def plot_problem(self, problem_def):
         self.ax.clear()
+        self.cbar_ax.set_visible(False)  # 隐藏colorbar轴
+        if self.colorbar is not None:
+            self.colorbar = None
+            
         verts, segs = np.array(problem_def.vertices), problem_def.segments
         if verts.size > 0:
             self.ax.plot(verts[:, 0], verts[:, 1], 'bo', label='顶点', markersize=4, zorder=5)
@@ -53,14 +71,14 @@ class CanvasWidget(QWidget):
         self.canvas.draw()
     
     def plot_result(self, result, plot_type='stress'):
+        # 清除主坐标轴内容
         self.ax.clear()
-        # 清除之前的colorbar
+        
+        # 清除colorbar
         if self.colorbar is not None:
-            try:
-                self.colorbar.remove()
-            except (AttributeError, ValueError):
-                pass
             self.colorbar = None
+        self.cbar_ax.clear()
+        self.cbar_ax.set_visible(False)
             
         mesh = result.mesh
         nodes = mesh['vertices']
@@ -104,7 +122,10 @@ class CanvasWidget(QWidget):
                 cax = self.ax.tripcolor(deformed_nodes[:, 0], deformed_nodes[:, 1], elements, facecolors=values, cmap='jet')
             elif values.ndim == 1 and len(values) == len(nodes): # 节点数据
                 cax = self.ax.tricontourf(deformed_nodes[:, 0], deformed_nodes[:, 1], elements, values, cmap='jet', levels=20)
-            self.colorbar = self.figure.colorbar(cax, ax=self.ax, label=f"{title} ({unit})")
+            
+            # 在固定的colorbar轴上创建colorbar
+            self.cbar_ax.set_visible(True)
+            self.colorbar = self.figure.colorbar(cax, cax=self.cbar_ax, label=f"{title} ({unit})")
         
         # 叠加网格 - 显示变形后的形状
         self.ax.triplot(deformed_nodes[:, 0], deformed_nodes[:, 1], elements, 'k-', linewidth=0.5, alpha=0.5)
@@ -117,13 +138,7 @@ class CanvasWidget(QWidget):
         self.canvas.draw()
 
     def clear_plot(self):
-        self.ax.clear()
-        # 清除colorbar
-        if self.colorbar is not None:
-            try:
-                self.colorbar.remove()
-            except (AttributeError, ValueError):
-                pass  # 忽略移除colorbar时的错误
-            self.colorbar = None
+        # 清除所有内容并重新创建布局
+        self._create_axes()
         self._setup_plot()
         self.canvas.draw()
