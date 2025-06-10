@@ -7,7 +7,11 @@ import json
 import os
 
 from gui.widgets.input_panel import InputPanel
-from gui.widgets.canvas_widget import CanvasWidget
+# 在文件顶部的导入部分，移除或注释掉原来的导入
+# from gui.widgets.canvas_widget import CanvasWidget
+
+# 确保EnhancedCanvasWidget的导入存在
+from .widgets.enhanced_canvas_widget import EnhancedCanvasWidget
 from gui.widgets.results_panel import ResultsPanel
 from gui.dialogs.material_dialog import MaterialDialog
 from core.fem_model import ProblemDefinition, FemResult
@@ -413,7 +417,18 @@ class MainWindow(QMainWindow):
         plot_controls.addStretch()
         
         # 画布和结果面板
-        self.canvas = CanvasWidget()
+        # 第272行附近，将：
+        # self.canvas = CanvasWidget()
+        # 替换为：
+        self.canvas = EnhancedCanvasWidget()
+        self.canvas.setStyleSheet("""
+            QWidget {
+                background-color: white;
+                border: 1px solid #e0e0e0;
+                border-radius: 6px;
+            }
+        """)
+        
         self.results_panel = ResultsPanel()
         
         right_layout.addLayout(plot_controls)

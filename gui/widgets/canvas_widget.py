@@ -364,3 +364,753 @@ class CanvasWidget(QWidget):
                     self.ax.annotate('', xy=arrow_end, xytext=arrow_start,
                                    arrowprops=dict(arrowstyle='->', color='orange', lw=1.5),
                                    zorder=4)
+# 在现有的导入中添加
+from PyQt6.QtGui import QIcon
+import os
+
+# 在 setup_ui 方法中修改结果显示控制面板部分
+def setup_ui(self):
+    # ... existing code ...
+    
+    # 获取图标路径
+    icon_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'resources', 'icons')
+    
+    # 结果显示控制面板
+    result_control_panel = QHBoxLayout()
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
+    result_control_panel.addWidget(QLabel("显示内容:"))
+    self.result_type_combo = QComboBox()
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))

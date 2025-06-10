@@ -10,18 +10,17 @@ a = Analysis(
         ('resources', 'resources'),  # 包含资源文件夹
         ('examples', 'examples'),    # 包含示例文件
     ],
+    # 在hiddenimports中添加VTK相关模块
     hiddenimports=[
-        'PyQt6.QtCore',
-        'PyQt6.QtGui', 
-        'PyQt6.QtWidgets',
-        'matplotlib.backends.backend_qt5agg',
         'triangle',
-        'pandas',
-        'openpyxl',
-        'PIL',
-        'scipy.sparse',
-        'scipy.sparse.linalg',
-        'numpy',
+        'scipy.spatial.qhull',
+        'scipy.sparse.csgraph._validation',
+        'vtk',
+        'vtk.qt',
+        'vtk.qt.QVTKRenderWindowInteractor',
+        'vtkmodules',
+        'vtkmodules.all',
+        'vtkmodules.qt',
     ],
     hookspath=[],
     hooksconfig={},

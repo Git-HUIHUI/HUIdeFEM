@@ -7,6 +7,7 @@ scipy>=1.7.0
 
 # 可视化
 matplotlib>=3.5.0
+vtk>=9.0.0
 
 # 网格剖分
 triangle>=20200424
@@ -18,4 +19,5 @@ openpyxl>=3.0.0
 Pillow>=8.0.0
 
 # 打包工具
+pyinstaller>=4.0
 PyInstaller>=5.0.0
