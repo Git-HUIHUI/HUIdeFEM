@@ -1,7 +1,7 @@
-from PyQt6.QtWidgets import (QMainWindow, QSplitter, QMessageBox, QWidget,
-                             QVBoxLayout, QHBoxLayout, QPushButton, QComboBox, QLabel,
-                             QFileDialog)
-from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, 
+                             QPushButton, QComboBox, QLabel, QFileDialog, 
+                             QSplitter, QSizePolicy, QMessageBox)
+from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtGui import QAction, QIcon
 import json
 import os
@@ -16,16 +16,284 @@ class MainWindow(QMainWindow):
     def __init__(self, controller, parent=None):
         super().__init__(parent)
         self.controller = controller
-        self.setWindowTitle("SlopeFEM_2D - 二维边坡有限元分析程序")
+        self.setWindowTitle("SlopeFEM 2D Professional - 专业二维边坡有限元分析软件")
         self.setGeometry(100, 100, 1800, 1000)
+        self.setMinimumSize(1200, 800)
+        
+        # 设置现代化样式
+        self._apply_modern_style()
+        
         self._create_actions()
         self._create_menu_bar()
         self._create_tool_bar()
         self._create_status_bar()
         self._create_central_widget()
         self._create_connections()
-        self._update_window_title()  # 设置初始窗口标题
+        self._update_window_title()
         self._update_all()
+
+    def _apply_modern_style(self):
+        """应用现代化的界面样式"""
+        style = """
+        QMainWindow {
+            background-color: #f5f5f5;
+            color: #333333;
+        }
+        
+        QMenuBar {
+            background-color: #ffffff;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 4px;
+            font-size: 9pt;
+        }
+        
+        QMenuBar::item {
+            background-color: transparent;
+            padding: 6px 12px;
+            border-radius: 4px;
+        }
+        
+        QMenuBar::item:selected {
+            background-color: #e3f2fd;
+            color: #1976d2;
+        }
+        
+        QMenu {
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 4px;
+        }
+        
+        QMenu::item {
+            padding: 8px 24px;
+            border-radius: 4px;
+        }
+        
+        QMenu::item:selected {
+            background-color: #e3f2fd;
+            color: #1976d2;
+        }
+        
+        QToolBar {
+            background-color: #ffffff;
+            border: none;
+            border-bottom: 1px solid #e0e0e0;
+            spacing: 2px;
+            padding: 4px;
+        }
+        
+        QToolBar QToolButton {
+            background-color: transparent;
+            border: none;
+            padding: 8px;
+            border-radius: 6px;
+            min-width: 32px;
+            min-height: 32px;
+        }
+        
+        QToolBar QToolButton:hover {
+            background-color: #e3f2fd;
+        }
+        
+        QToolBar QToolButton:pressed {
+            background-color: #bbdefb;
+        }
+        
+        QStatusBar {
+            background-color: #ffffff;
+            border-top: 1px solid #e0e0e0;
+            padding: 4px;
+            font-size: 9pt;
+        }
+        
+        QSplitter::handle {
+            background-color: #e0e0e0;
+            width: 2px;
+        }
+        
+        QSplitter::handle:hover {
+            background-color: #1976d2;
+        }
+        """
+        self.setStyleSheet(style)
+
+    def _create_tool_bar(self):
+        toolbar = self.addToolBar("主要工具")
+        toolbar.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextUnderIcon)
+        toolbar.setIconSize(QSize(24, 24))
+        
+        toolbar.addAction(self.new_action)
+        toolbar.addAction(self.open_action)
+        toolbar.addAction(self.save_action)
+        toolbar.addSeparator()
+        toolbar.addAction(self.load_example_action)
+        toolbar.addSeparator()
+        toolbar.addAction(self.material_action)
+        toolbar.addAction(self.calc_action)
+        
+        # 添加弹性空间
+        spacer = QWidget()
+        spacer.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+        toolbar.addWidget(spacer)
+        
+        # 添加视图控制
+        view_label = QLabel("视图: ")
+        view_label.setStyleSheet("color: #666666; font-weight: bold;")
+        toolbar.addWidget(view_label)
+        toolbar.addWidget(self.plot_selector)
+
+    def _create_central_widget(self):
+        main_widget = QWidget()
+        main_widget.setStyleSheet("""
+            QWidget {
+                background-color: #f5f5f5;
+            }
+        """)
+        self.setCentralWidget(main_widget)
+        main_layout = QHBoxLayout(main_widget)
+        main_layout.setSpacing(0)
+        main_layout.setContentsMargins(0, 0, 0, 0)
+        
+        splitter = QSplitter(Qt.Orientation.Horizontal)
+        
+        # 左侧面板容器
+        left_container = QWidget()
+        left_container.setStyleSheet("""
+            QWidget {
+                background-color: #ffffff;
+                border-right: 1px solid #e0e0e0;
+            }
+        """)
+        left_layout = QVBoxLayout(left_container)
+        left_layout.setContentsMargins(0, 0, 0, 0)
+        
+        # 添加左侧面板标题
+        title_widget = QWidget()
+        title_widget.setStyleSheet("""
+            QWidget {
+                background-color: #1976d2;
+                color: white;
+                font-weight: bold;
+                font-size: 10pt;
+            }
+        """)
+        title_layout = QHBoxLayout(title_widget)
+        title_layout.setContentsMargins(15, 8, 15, 8)
+        title_label = QLabel("模型定义")
+        title_label.setStyleSheet("color: white; font-weight: bold;")
+        title_layout.addWidget(title_label)
+        
+        left_layout.addWidget(title_widget)
+        
+        # 输入面板
+        self.input_panel = InputPanel(self.controller)
+        left_layout.addWidget(self.input_panel)
+        
+        # 右侧面板
+        right_panel = QWidget()
+        right_panel.setStyleSheet("""
+            QWidget {
+                background-color: #ffffff;
+            }
+        """)
+        right_layout = QVBoxLayout(right_panel)
+        right_layout.setContentsMargins(10, 10, 10, 10)
+        right_layout.setSpacing(10)
+        
+        # 右侧面板标题和控制
+        header_widget = QWidget()
+        header_layout = QHBoxLayout(header_widget)
+        header_layout.setContentsMargins(0, 0, 0, 0)
+        
+        canvas_title = QLabel("分析视图")
+        canvas_title.setStyleSheet("""
+            QLabel {
+                font-size: 12pt;
+                font-weight: bold;
+                color: #333333;
+            }
+        """)
+        
+        # 绘图控制面板
+        controls_widget = QWidget()
+        controls_widget.setStyleSheet("""
+            QWidget {
+                background-color: #f8f9fa;
+                border: 1px solid #e0e0e0;
+                border-radius: 6px;
+                padding: 8px;
+            }
+        """)
+        controls_layout = QHBoxLayout(controls_widget)
+        controls_layout.setContentsMargins(8, 8, 8, 8)
+        
+        plot_label = QLabel("显示内容:")
+        plot_label.setStyleSheet("font-weight: bold; color: #555555;")
+        
+        self.plot_selector = QComboBox()
+        self.plot_selector.addItems([
+            "模型预览", 
+            "Von Mises 应力", 
+            "水平位移 (原始)", 
+            "竖直位移 (原始)",
+            "水平位移 (放大)", 
+            "竖直位移 (放大)"
+        ])
+        self.plot_selector.setStyleSheet("""
+            QComboBox {
+                background-color: white;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                padding: 6px 12px;
+                min-width: 150px;
+            }
+            QComboBox:hover {
+                border-color: #1976d2;
+            }
+            QComboBox::drop-down {
+                border: none;
+                width: 20px;
+            }
+        """)
+        
+        controls_layout.addWidget(plot_label)
+        controls_layout.addWidget(self.plot_selector)
+        controls_layout.addStretch()
+        
+        header_layout.addWidget(canvas_title)
+        header_layout.addStretch()
+        header_layout.addWidget(controls_widget)
+        
+        # 画布和结果面板
+        self.canvas = CanvasWidget()
+        self.canvas.setStyleSheet("""
+            QWidget {
+                background-color: white;
+                border: 1px solid #e0e0e0;
+                border-radius: 6px;
+            }
+        """)
+        
+        self.results_panel = ResultsPanel()
+        self.results_panel.setStyleSheet("""
+            QWidget {
+                background-color: white;
+                border: 1px solid #e0e0e0;
+                border-radius: 6px;
+            }
+        """)
+        
+        right_layout.addWidget(header_widget)
+        right_layout.addWidget(self.canvas)
+        right_layout.addWidget(self.results_panel)
+        right_layout.setStretch(1, 3)  # canvas占更多空间
+        right_layout.setStretch(2, 1)  # results panel占较少空间
+
+        splitter.addWidget(left_container)
+        splitter.addWidget(right_panel)
+        splitter.setSizes([450, 1350])
+        main_layout.addWidget(splitter)
 
     def _create_actions(self):
         # 文件操作
@@ -40,19 +308,28 @@ class MainWindow(QMainWindow):
         
         # 设置图标
         icon_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'resources', 'icons')
-        if os.path.exists(os.path.join(icon_path, 'open_file.png')):
-            self.open_action.setIcon(QIcon(os.path.join(icon_path, 'open_file.png')))
-        if os.path.exists(os.path.join(icon_path, 'save_file.png')):
-            self.save_action.setIcon(QIcon(os.path.join(icon_path, 'save_file.png')))
-            self.save_as_action.setIcon(QIcon(os.path.join(icon_path, 'save_file.png')))
-        if os.path.exists(os.path.join(icon_path, 'calculate.png')):
+        
+        # 为各个动作设置图标
+        if os.path.exists(os.path.join(icon_path, '新建项目.png')):
+            self.new_action.setIcon(QIcon(os.path.join(icon_path, '新建项目.png')))
+        if os.path.exists(os.path.join(icon_path, '打开项目.png')):
+            self.open_action.setIcon(QIcon(os.path.join(icon_path, '打开项目.png')))
+        if os.path.exists(os.path.join(icon_path, '保存项目.png')):
+            self.save_action.setIcon(QIcon(os.path.join(icon_path, '保存项目.png')))
+            self.save_as_action.setIcon(QIcon(os.path.join(icon_path, '保存项目.png')))
+        if os.path.exists(os.path.join(icon_path, '加载预设案例.png')):
+            self.load_example_action.setIcon(QIcon(os.path.join(icon_path, '加载预设案例.png')))
+        if os.path.exists(os.path.join(icon_path, '计算.png')):
             self.calc_action = QAction("计算", self)
-            self.calc_action.setIcon(QIcon(os.path.join(icon_path, 'calculate.png')))
+            self.calc_action.setIcon(QIcon(os.path.join(icon_path, '计算.png')))
         else:
             self.calc_action = QAction("计算", self)
         
         # 其他操作
         self.material_action = QAction("材料库...", self)
+        if os.path.exists(os.path.join(icon_path, '材料库.png')):
+            self.material_action.setIcon(QIcon(os.path.join(icon_path, '材料库.png')))
+        
         self.about_action = QAction("关于", self)
         
         # 设置快捷键
@@ -115,7 +392,7 @@ class MainWindow(QMainWindow):
         
         # 左侧面板 (仅输入面板)
         self.input_panel = InputPanel(self.controller)
-
+    
         # 右侧面板 (画布和结果)
         right_panel = QWidget()
         right_layout = QVBoxLayout(right_panel)

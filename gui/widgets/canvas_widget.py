@@ -1,6 +1,7 @@
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from PyQt6.QtWidgets import QWidget, QVBoxLayout
+from PyQt6.QtCore import Qt
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
@@ -12,26 +13,167 @@ plt.rcParams['axes.unicode_minus'] = False
 class CanvasWidget(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.figure = Figure(figsize=(10, 8))
+        # 使用 constrained_layout 替代 tight_layout 来避免警告
+        self.figure = Figure(figsize=(10, 8), constrained_layout=True)
         self.canvas = FigureCanvas(self.figure)
         self.ax = None
         self.colorbar = None
+        
+        # 初始化缩放相关属性
+        self.original_xlim = None
+        self.original_ylim = None
+        
+        # 初始化平移相关属性
+        self.pan_start = None
+        self.is_panning = False
+        
         layout = QVBoxLayout(self)
         layout.addWidget(self.canvas)
         layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(layout)
         self._create_axes()
         self._setup_plot()
+        
+        # 启用鼠标交互功能
+        self._setup_mouse_interaction()
+
+    def _setup_mouse_interaction(self):
+        """设置鼠标交互功能（缩放和平移）"""
+        # 连接鼠标事件
+        self.canvas.mpl_connect('scroll_event', self._on_scroll)
+        self.canvas.mpl_connect('button_press_event', self._on_mouse_press)
+        self.canvas.mpl_connect('button_release_event', self._on_mouse_release)
+        self.canvas.mpl_connect('motion_notify_event', self._on_mouse_move)
+
+    def _on_scroll(self, event):
+        """处理鼠标滚轮事件（缩放）"""
+        if event.inaxes != self.ax:
+            return
+            
+        # 获取当前坐标轴范围
+        cur_xlim = self.ax.get_xlim()
+        cur_ylim = self.ax.get_ylim()
+        
+        # 获取鼠标位置
+        xdata = event.xdata
+        ydata = event.ydata
+        
+        if xdata is None or ydata is None:
+            return
+            
+        # 设置缩放因子
+        if event.button == 'up':
+            # 向上滚动，放大
+            scale_factor = 0.9
+        elif event.button == 'down':
+            # 向下滚动，缩小
+            scale_factor = 1.1
+        else:
+            return
+            
+        # 计算新的坐标轴范围
+        new_width = (cur_xlim[1] - cur_xlim[0]) * scale_factor
+        new_height = (cur_ylim[1] - cur_ylim[0]) * scale_factor
+        
+        # 以鼠标位置为中心进行缩放
+        relx = (cur_xlim[1] - xdata) / (cur_xlim[1] - cur_xlim[0])
+        rely = (cur_ylim[1] - ydata) / (cur_ylim[1] - cur_ylim[0])
+        
+        new_xlim = [xdata - new_width * (1 - relx), xdata + new_width * relx]
+        new_ylim = [ydata - new_height * (1 - rely), ydata + new_height * rely]
+        
+        # 应用新的坐标轴范围
+        self.ax.set_xlim(new_xlim)
+        self.ax.set_ylim(new_ylim)
+        
+        # 重新绘制
+        self.canvas.draw()
+
+    def _on_mouse_press(self, event):
+        """处理鼠标按下事件"""
+        if event.inaxes != self.ax:
+            return
+            
+        if event.button == 1:  # 左键
+            self.is_panning = True
+            self.pan_start = (event.xdata, event.ydata)
+            # 改变鼠标光标为移动状态
+            self.canvas.setCursor(Qt.CursorShape.ClosedHandCursor)
+
+    def _on_mouse_release(self, event):
+        """处理鼠标释放事件"""
+        if event.button == 1:  # 左键
+            self.is_panning = False
+            self.pan_start = None
+            # 恢复鼠标光标
+            self.canvas.setCursor(Qt.CursorShape.ArrowCursor)
+
+    def _on_mouse_move(self, event):
+        """处理鼠标移动事件（平移）"""
+        if not self.is_panning or self.pan_start is None:
+            return
+            
+        if event.inaxes != self.ax:
+            return
+            
+        if event.xdata is None or event.ydata is None:
+            return
+            
+        # 计算移动距离
+        dx = self.pan_start[0] - event.xdata
+        dy = self.pan_start[1] - event.ydata
+        
+        # 获取当前坐标轴范围
+        cur_xlim = self.ax.get_xlim()
+        cur_ylim = self.ax.get_ylim()
+        
+        # 应用平移
+        new_xlim = [cur_xlim[0] + dx, cur_xlim[1] + dx]
+        new_ylim = [cur_ylim[0] + dy, cur_ylim[1] + dy]
+        
+        self.ax.set_xlim(new_xlim)
+        self.ax.set_ylim(new_ylim)
+        
+        # 重新绘制
+        self.canvas.draw()
 
     def _create_axes(self):
-        """创建固定布局的坐标轴"""
+        """创建坐标轴"""
         self.figure.clear()
-        # 使用GridSpec创建固定布局，为colorbar预留空间
-        gs = GridSpec(1, 2, figure=self.figure, width_ratios=[1, 0.05], wspace=0.1)
+        
+        # 创建GridSpec布局，为colorbar预留空间
+        from matplotlib.gridspec import GridSpec
+        gs = GridSpec(1, 2, width_ratios=[20, 1], wspace=0.05)
+        
+        # 设置现代化的图形样式
+        self.figure.patch.set_facecolor('#ffffff')
+        
+        # 创建主绘图区域
         self.ax = self.figure.add_subplot(gs[0])
+        
+        # 设置坐标轴样式
+        self.ax.set_facecolor('#fafafa')
+        self.ax.grid(True, alpha=0.3, linestyle='-', linewidth=0.5)
+        self.ax.set_axisbelow(True)
+        
+        # 设置坐标轴标签样式
+        self.ax.set_xlabel('X 坐标 (m)', fontsize=10, fontweight='bold', color='#333333')
+        self.ax.set_ylabel('Y 坐标 (m)', fontsize=10, fontweight='bold', color='#333333')
+        
+        # 设置刻度样式
+        self.ax.tick_params(axis='both', which='major', labelsize=9, colors='#666666')
+        
+        # 设置边框样式
+        for spine in self.ax.spines.values():
+            spine.set_color('#cccccc')
+            spine.set_linewidth(1)
+        
+        # 创建colorbar区域（初始时隐藏）
         self.cbar_ax = self.figure.add_subplot(gs[1])
         self.cbar_ax.set_visible(False)  # 初始时隐藏colorbar轴
         self.colorbar = None
+        
+        # 移除 tight_layout 调用，因为使用了 constrained_layout
 
     def _setup_plot(self, title="模型预览"):
         self.ax.set_aspect('equal', adjustable='box')
@@ -39,7 +181,14 @@ class CanvasWidget(QWidget):
         self.ax.set_title(title)
         self.ax.set_xlabel("X 坐标 (m)")
         self.ax.set_ylabel("Y 坐标 (m)")
-        self.figure.tight_layout()
+        # 移除 tight_layout 调用
+
+    def reset_zoom(self):
+        """重置缩放到初始视图"""
+        if self.original_xlim is not None and self.original_ylim is not None:
+            self.ax.set_xlim(self.original_xlim)
+            self.ax.set_ylim(self.original_ylim)
+            self.canvas.draw()
 
     def plot_problem(self, problem_def):
         self.ax.clear()
@@ -48,25 +197,37 @@ class CanvasWidget(QWidget):
             self.colorbar = None
             
         verts, segs = np.array(problem_def.vertices), problem_def.segments
+        
+        # 绘制顶点
         if verts.size > 0:
             self.ax.plot(verts[:, 0], verts[:, 1], 'bo', label='顶点', markersize=4, zorder=5)
-            for i, (x, y) in enumerate(verts): self.ax.text(x, y, f' {i}', c='blue', fontsize=8)
+            for i, (x, y) in enumerate(verts): 
+                self.ax.text(x, y, f' {i}', c='blue', fontsize=8)
+        
+        # 绘制线段
         if segs:
             for i, seg in enumerate(segs):
                 if max(seg) < len(verts):
                     p1, p2 = verts[seg[0]], verts[seg[1]]
                     self.ax.plot([p1[0], p2[0]], [p1[1], p2[1]], 'r-')
+        
+        # 绘制区域点
         if problem_def.regions:
             region_points = np.array([r[:2] for r in problem_def.regions])
             self.ax.scatter(region_points[:, 0], region_points[:, 1], marker='x', c='g', s=80, label='区域点')
+        
+        # 绘制约束
         if problem_def.constraints:
             for seg_id, const_type in problem_def.constraints.items():
                 if seg_id < len(segs) and max(segs[seg_id]) < len(verts):
                     p1, p2 = verts[segs[seg_id][0]], verts[segs[seg_id][1]]
                     mid = ((p1[0]+p2[0])/2, (p1[1]+p2[1])/2)
-                    if "固定" in const_type: self.ax.plot(mid[0], mid[1], 'ks', ms=7)
-                    elif "X向" in const_type: self.ax.plot(mid[0], mid[1], 'k>', ms=7)
-                    elif "Y向" in const_type: self.ax.plot(mid[0], mid[1], 'k^', ms=7)
+                    if "固定" in const_type: 
+                        self.ax.plot(mid[0], mid[1], 'ks', ms=7)
+                    elif "X向" in const_type: 
+                        self.ax.plot(mid[0], mid[1], 'k>', ms=7)
+                    elif "Y向" in const_type: 
+                        self.ax.plot(mid[0], mid[1], 'k^', ms=7)
         
         # 绘制荷载箭头（匀布荷载形式）
         if problem_def.loads:
@@ -75,12 +236,18 @@ class CanvasWidget(QWidget):
         # 绘制目标点
         if problem_def.target_points:
             for name, (x, y) in problem_def.target_points.items():
-                self.ax.plot(x, y, 'ro', markersize=8, markeredgecolor='black', markeredgewidth=1, label='目标点' if name == list(problem_def.target_points.keys())[0] else "", zorder=6)
+                self.ax.plot(x, y, 'ro', markersize=8, markeredgecolor='black', markeredgewidth=1, 
+                           label='目标点' if name == list(problem_def.target_points.keys())[0] else "", zorder=6)
                 self.ax.text(x, y, f' {name}', c='red', fontsize=10, fontweight='bold')
             
         self._setup_plot()
+        
+        # 保存初始视图范围
+        self.original_xlim = self.ax.get_xlim()
+        self.original_ylim = self.ax.get_ylim()
+        
         self.canvas.draw()
-    
+
     def plot_result(self, result, plot_type='stress'):
         # 清除主坐标轴内容
         self.ax.clear()

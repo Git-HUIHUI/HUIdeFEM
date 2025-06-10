@@ -1,8 +1,13 @@
-from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QGroupBox, QTableWidget, QComboBox,
-                             QTableWidgetItem, QPushButton, QHBoxLayout, 
-                             QHeaderView, QAbstractItemView, QTabWidget, QLabel,
-                             QLineEdit, QFormLayout)
+import os
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QPixmap
+from PyQt6.QtWidgets import (
+    QWidget, QVBoxLayout, QHBoxLayout, QTabWidget, QTableWidget, 
+    QTableWidgetItem, QPushButton, QComboBox, QLabel, QSpinBox, 
+    QDoubleSpinBox, QCheckBox, QHeaderView, QFormLayout, QLineEdit  # 添加 QFormLayout 和 QLineEdit
+)
 from PyQt6.QtCore import Qt, pyqtSignal
+from PyQt6.QtGui import QIcon
 
 class InputPanel(QWidget):
     """
@@ -19,11 +24,47 @@ class InputPanel(QWidget):
     def _init_ui(self):
         """初始化UI组件。"""
         main_layout = QVBoxLayout(self)
-        main_layout.setSpacing(10)
-        main_layout.setContentsMargins(10, 10, 10, 10)
+        main_layout.setSpacing(0)
+        main_layout.setContentsMargins(0, 0, 0, 0)
         
         # 创建选项卡控件
         self.tab_widget = QTabWidget()
+        self.tab_widget.setStyleSheet("""
+            QTabWidget::pane {
+                border: none;
+                background-color: #ffffff;
+            }
+            
+            QTabBar::tab {
+                background-color: #f8f9fa;
+                border: 1px solid #e0e0e0;
+                border-bottom: none;
+                padding: 8px 16px;
+                margin-right: 2px;
+                border-top-left-radius: 6px;
+                border-top-right-radius: 6px;
+                min-width: 80px;
+                font-weight: 500;
+            }
+            
+            QTabBar::tab:selected {
+                background-color: #ffffff;
+                color: #1976d2;
+                border-bottom: 2px solid #1976d2;
+                font-weight: bold;
+            }
+            
+            QTabBar::tab:hover:!selected {
+                background-color: #e3f2fd;
+            }
+            
+            QTabWidget::tab-bar {
+                alignment: left;
+            }
+        """)
+        
+        # 获取图标路径
+        icon_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'resources', 'icons')
         
         # 创建各个选项卡页面
         vertices_widget, self.vertices_table = self._create_tab_page("定义顶点", ["ID", "X 坐标", "Y 坐标"])
@@ -32,18 +73,36 @@ class InputPanel(QWidget):
         bc_widget, self.bc_table = self._create_tab_page("边界条件", ["线段 ID", "约束类型", "荷载 Q (N/m)"])
         targets_widget, self.targets_table = self._create_tab_page("目标点", ["点名称", "X 坐标", "Y 坐标"])
         mesh_widget = self._create_mesh_settings_page()
-
-        # 创建导出页面
         export_widget = self._create_export_page()
         
-        # 添加选项卡页面
+        # 添加选项卡页面并设置图标
         self.tab_widget.addTab(vertices_widget, "1. 顶点")
+        if os.path.exists(os.path.join(icon_path, '顶点.png')):
+            self.tab_widget.setTabIcon(0, QIcon(os.path.join(icon_path, '顶点.png')))
+            
         self.tab_widget.addTab(segments_widget, "2. 线段")
+        if os.path.exists(os.path.join(icon_path, '线段.png')):
+            self.tab_widget.setTabIcon(1, QIcon(os.path.join(icon_path, '线段.png')))
+            
         self.tab_widget.addTab(regions_widget, "3. 区域")
+        if os.path.exists(os.path.join(icon_path, '区域.png')):
+            self.tab_widget.setTabIcon(2, QIcon(os.path.join(icon_path, '区域.png')))
+            
         self.tab_widget.addTab(bc_widget, "4. 边界")
+        if os.path.exists(os.path.join(icon_path, '边界.png')):
+            self.tab_widget.setTabIcon(3, QIcon(os.path.join(icon_path, '边界.png')))
+            
         self.tab_widget.addTab(targets_widget, "5. 目标点")
+        if os.path.exists(os.path.join(icon_path, '目标点.png')):
+            self.tab_widget.setTabIcon(4, QIcon(os.path.join(icon_path, '目标点.png')))
+            
         self.tab_widget.addTab(mesh_widget, "6. 网格设置")
+        if os.path.exists(os.path.join(icon_path, '网格设置.png')):
+            self.tab_widget.setTabIcon(5, QIcon(os.path.join(icon_path, '网格设置.png')))
+            
         self.tab_widget.addTab(export_widget, "7. 导出结果")
+        if os.path.exists(os.path.join(icon_path, '导出结果.png')):
+            self.tab_widget.setTabIcon(6, QIcon(os.path.join(icon_path, '导出结果.png')))
 
         # 连接按钮事件
         vertices_widget.findChild(QPushButton, "add_button").clicked.connect(self._add_vertex_row)
@@ -67,43 +126,129 @@ class InputPanel(QWidget):
     def _create_tab_page(self, title, headers):
         """创建选项卡页面，包含表格和按钮。"""
         widget = QWidget()
+        widget.setStyleSheet("""
+            QWidget {
+                background-color: #ffffff;
+            }
+        """)
         layout = QVBoxLayout(widget)
-        layout.setSpacing(10)
-        layout.setContentsMargins(15, 15, 15, 15)
+        layout.setSpacing(15)
+        layout.setContentsMargins(20, 20, 20, 20)
         
         # 创建表格
         table = QTableWidget(objectName=title)
         table.setColumnCount(len(headers))
         table.setHorizontalHeaderLabels(headers)
-        table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
-        table.itemChanged.connect(self.data_changed.emit)
         
-        # 设置表格样式
-        table.verticalHeader().setDefaultSectionSize(35)
-        font = table.font()
-        font.setPointSize(10)
-        table.setFont(font)
-    
+        # 设置表格行高
+        table.verticalHeader().setDefaultSectionSize(50)  # 设置默认行高为50像素
+        table.verticalHeader().setMinimumSectionSize(45)  # 设置最小行高为45像素
+        
+        # 设置表格列宽调整模式
+        header = table.horizontalHeader()
+        from PyQt6.QtWidgets import QHeaderView
+        
+        # 根据不同的表格设置不同的列宽策略
+        if title == "定义区域":
+            # 区域表格：X坐标、Y坐标列固定宽度，材料列拉伸填充
+            header.setSectionResizeMode(0, QHeaderView.ResizeMode.Fixed)
+            header.setSectionResizeMode(1, QHeaderView.ResizeMode.Fixed)
+            header.setSectionResizeMode(2, QHeaderView.ResizeMode.Stretch)
+            table.setColumnWidth(0, 100)  # X坐标列宽度
+            table.setColumnWidth(1, 100)  # Y坐标列宽度
+        elif title == "边界条件":
+            # 边界条件表格：线段ID列固定，约束类型列拉伸，荷载列固定
+            header.setSectionResizeMode(0, QHeaderView.ResizeMode.Fixed)
+            header.setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)
+            header.setSectionResizeMode(2, QHeaderView.ResizeMode.Fixed)
+            table.setColumnWidth(0, 80)   # 线段ID列宽度
+            table.setColumnWidth(2, 120)  # 荷载列宽度
+        else:
+            # 其他表格使用默认的拉伸模式
+            header.setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+        
+        table.setStyleSheet("""
+            QTableWidget {
+                background-color: #ffffff;
+                border: 1px solid #e0e0e0;
+                border-radius: 6px;
+                gridline-color: #f0f0f0;
+                selection-background-color: #e3f2fd;
+            }
+            
+            QTableWidget::item {
+                padding: 15px 8px;  /* 进一步增加垂直内边距 */
+                border: none;
+                min-height: 30px;   /* 增加最小高度 */
+            }
+            
+            QTableWidget::item:selected {
+                background-color: #e3f2fd;
+                color: #1976d2;
+            }
+            
+            QHeaderView::section {
+                background-color: #f8f9fa;
+                border: none;
+                border-bottom: 1px solid #e0e0e0;
+                border-right: 1px solid #e0e0e0;
+                padding: 15px 10px;  /* 增加表头内边距 */
+                font-weight: bold;
+                color: #555555;
+                min-height: 35px;    /* 增加表头最小高度 */
+            }
+        """)
+        
         # 创建按钮布局
-        buttons_layout = QHBoxLayout()
-        add_btn = QPushButton("+ 添加", objectName="add_button")
-        remove_btn = QPushButton("- 移除", objectName="remove_button")
+        button_layout = QHBoxLayout()
+        button_layout.setSpacing(10)
         
-        # 设置按钮样式
-        for btn in [add_btn, remove_btn]:
-            btn.setMinimumHeight(35)
-            btn.setMinimumWidth(80)
-            font = btn.font()
-            font.setPointSize(10)
-            btn.setFont(font)
+        add_button = QPushButton("添加行")
+        add_button.setObjectName("add_button")
+        add_button.setStyleSheet("""
+            QPushButton {
+                background-color: #1976d2;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 6px;
+                font-weight: bold;
+                min-width: 80px;
+            }
+            QPushButton:hover {
+                background-color: #1565c0;
+            }
+            QPushButton:pressed {
+                background-color: #0d47a1;
+            }
+        """)
         
-        buttons_layout.addStretch()
-        buttons_layout.addWidget(add_btn)
-        buttons_layout.addWidget(remove_btn)
+        remove_button = QPushButton("删除行")
+        remove_button.setObjectName("remove_button")
+        remove_button.setStyleSheet("""
+            QPushButton {
+                background-color: #f44336;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 6px;
+                font-weight: bold;
+                min-width: 80px;
+            }
+            QPushButton:hover {
+                background-color: #d32f2f;
+            }
+            QPushButton:pressed {
+                background-color: #b71c1c;
+            }
+        """)
         
-        # 组装布局
+        button_layout.addWidget(add_button)
+        button_layout.addWidget(remove_button)
+        button_layout.addStretch()
+        
         layout.addWidget(table)
-        layout.addLayout(buttons_layout)
+        layout.addLayout(button_layout)
         
         return widget, table  # 返回元组而不是单个widget
 
@@ -362,141 +507,198 @@ class InputPanel(QWidget):
             raise e
     
     def _create_export_page(self):
-        """创建导出结果页面。"""
-        from PyQt6.QtWidgets import QFileDialog, QMessageBox
-        from PyQt6.QtCore import QDateTime
-        
+        """创建导出页面"""
         widget = QWidget()
+        widget.setStyleSheet("""
+            QWidget {
+                background-color: #ffffff;
+            }
+        """)
         layout = QVBoxLayout(widget)
         layout.setSpacing(20)
-        layout.setContentsMargins(15, 15, 15, 15)
+        layout.setContentsMargins(30, 30, 30, 30)
         
-        # 标题
-        title_label = QLabel("导出计算结果")
-        title_label.setStyleSheet("font-size: 14pt; font-weight: bold; color: #2c3e50;")
+        # 页面标题
+        title_label = QLabel("导出分析结果")
+        title_label.setStyleSheet("""
+            QLabel {
+                font-size: 16pt;
+                font-weight: bold;
+                color: #333333;
+                margin-bottom: 10px;
+            }
+        """)
         layout.addWidget(title_label)
         
-        # 说明文字
-        info_label = QLabel("在完成有限元计算后，您可以将结果导出为CSV或Excel格式进行进一步分析。")
-        info_label.setStyleSheet("color: #7f8c8d; font-size: 10pt;")
-        info_label.setWordWrap(True)
+        # 导出说明
+        info_label = QLabel("选择需要导出的数据格式：")
+        info_label.setStyleSheet("""
+            QLabel {
+                font-size: 10pt;
+                color: #666666;
+                margin-bottom: 20px;
+            }
+        """)
         layout.addWidget(info_label)
         
-        # 导出按钮区域
-        buttons_layout = QVBoxLayout()
+        # 添加导出状态标签
+        self.export_status_label = QLabel("请先运行计算以生成结果数据")
+        self.export_status_label.setStyleSheet("""
+            QLabel {
+                font-size: 10pt;
+                color: #e74c3c;
+                font-style: italic;
+                margin-bottom: 15px;
+                padding: 10px;
+                background-color: #fdf2f2;
+                border: 1px solid #f5c6cb;
+                border-radius: 4px;
+            }
+        """)
+        layout.addWidget(self.export_status_label)
+        
+        # 导出按钮容器
+        buttons_container = QWidget()
+        buttons_layout = QVBoxLayout(buttons_container)
         buttons_layout.setSpacing(15)
         
-        # CSV导出按钮
-        self.export_csv_btn = QPushButton("📄 导出为CSV格式")
-        self.export_csv_btn.setMinimumHeight(50)
-        self.export_csv_btn.setStyleSheet("""
-            QPushButton {
-                background-color: #3498db;
-                color: white;
-                border: none;
-                border-radius: 8px;
-                font-size: 12pt;
-                font-weight: bold;
-                padding: 10px;
-            }
-            QPushButton:hover {
-                background-color: #2980b9;
-            }
-            QPushButton:disabled {
-                background-color: #bdc3c7;
-                color: #7f8c8d;
-            }
-        """)
-        self.export_csv_btn.setEnabled(False)
-        self.export_csv_btn.clicked.connect(self._export_csv)
+        # 创建导出按钮
+        export_buttons = [
+            ("导出为CSV格式", "将数据导出为CSV文件，便于在Excel等软件中查看", "#4caf50"),
+            ("导出为Excel格式", "将数据导出为Excel文件，包含多个工作表", "#2196f3"),
+            ("导出为PNG图像", "将当前视图导出为高质量PNG图像", "#ff9800"),
+            ("导出为PDF文档", "将分析报告导出为PDF文档", "#9c27b0")
+        ]
         
-        # Excel导出按钮
-        self.export_excel_btn = QPushButton("📊 导出为Excel格式")
-        self.export_excel_btn.setMinimumHeight(50)
-        self.export_excel_btn.setStyleSheet("""
-            QPushButton {
-                background-color: #27ae60;
-                color: white;
-                border: none;
-                border-radius: 8px;
-                font-size: 12pt;
-                font-weight: bold;
-                padding: 10px;
-            }
-            QPushButton:hover {
-                background-color: #229954;
-            }
-            QPushButton:disabled {
-                background-color: #bdc3c7;
-                color: #7f8c8d;
-            }
-        """)
-        self.export_excel_btn.setEnabled(False)
-        self.export_excel_btn.clicked.connect(self._export_excel)
+        for button_text, description, color in export_buttons:
+            button_widget = self._create_export_button(button_text, description, color)
+            buttons_layout.addWidget(button_widget)
         
-        buttons_layout.addWidget(self.export_csv_btn)
-        buttons_layout.addWidget(self.export_excel_btn)
-        
-        # 图像导出按钮
-        self.export_png_btn = QPushButton("🖼️ 导出为PNG图像")
-        self.export_png_btn.setMinimumHeight(50)
-        self.export_png_btn.setStyleSheet("""
-            QPushButton {
-                background-color: #e67e22;
-                color: white;
-                border: none;
-                border-radius: 8px;
-                font-size: 12pt;
-                font-weight: bold;
-                padding: 10px;
-            }
-            QPushButton:hover {
-                background-color: #d35400;
-            }
-            QPushButton:disabled {
-                background-color: #bdc3c7;
-                color: #7f8c8d;
-            }
-        """)
-        self.export_png_btn.setEnabled(False)
-        self.export_png_btn.clicked.connect(self._export_png)
-        
-        self.export_pdf_btn = QPushButton("📄 导出为PDF文档")
-        self.export_pdf_btn.setMinimumHeight(50)
-        self.export_pdf_btn.setStyleSheet("""
-            QPushButton {
-                background-color: #8e44ad;
-                color: white;
-                border: none;
-                border-radius: 8px;
-                font-size: 12pt;
-                font-weight: bold;
-                padding: 10px;
-            }
-            QPushButton:hover {
-                background-color: #7d3c98;
-            }
-            QPushButton:disabled {
-                background-color: #bdc3c7;
-                color: #7f8c8d;
-            }
-        """)
-        self.export_pdf_btn.setEnabled(False)
-        self.export_pdf_btn.clicked.connect(self._export_pdf)
-        
-        buttons_layout.addWidget(self.export_png_btn)
-        buttons_layout.addWidget(self.export_pdf_btn)
-        
-        # 状态标签
-        self.export_status_label = QLabel("请先运行计算以生成结果数据")
-        self.export_status_label.setStyleSheet("color: #e74c3c; font-style: italic;")
-        self.export_status_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        
-        layout.addLayout(buttons_layout)
-        layout.addWidget(self.export_status_label)
+        layout.addWidget(buttons_container)
         layout.addStretch()
         
         return widget
+    
+    def _create_export_button(self, text, description, color):
+        """创建单个导出按钮"""
+        container = QWidget()
+        container.setStyleSheet(f"""
+            QWidget {{
+                background-color: #ffffff;
+                border: 2px solid {color};
+                border-radius: 10px;
+                padding: 15px;
+            }}
+            QWidget:hover {{
+                background-color: {color}15;
+                border-color: {color};
+            }}
+        """)
+        
+        layout = QHBoxLayout(container)
+        layout.setContentsMargins(15, 15, 15, 15)
+        
+        # 按钮图标区域 - 使用实际图标文件
+        icon_label = QLabel()
+        
+        # 根据按钮类型选择对应的图标文件
+        icon_path = ""
+        if "CSV" in text:
+            icon_path = "d:/SlopeFEM_2D/resources/icons/csv.png"
+        elif "Excel" in text:
+            icon_path = "d:/SlopeFEM_2D/resources/icons/Excel.png"
+        elif "PNG" in text:
+            icon_path = "d:/SlopeFEM_2D/resources/icons/png.png"
+        elif "PDF" in text:
+            icon_path = "d:/SlopeFEM_2D/resources/icons/pdf.png"
+        
+        # 加载并设置图标
+        if icon_path and os.path.exists(icon_path):
+            pixmap = QPixmap(icon_path)
+            # 缩放图标到合适大小
+            scaled_pixmap = pixmap.scaled(32, 32, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+            icon_label.setPixmap(scaled_pixmap)
+        else:
+            # 如果图标文件不存在，使用默认emoji
+            icon_label.setText("📄")
+            icon_label.setStyleSheet(f"""
+                QLabel {{
+                    font-size: 24pt;
+                    color: {color};
+                }}
+            """)
+        
+        icon_label.setStyleSheet(f"""
+            QLabel {{
+                min-width: 40px;
+                max-width: 40px;
+                min-height: 40px;
+                max-height: 40px;
+            }}
+        """)
+        
+        # 文本区域
+        text_widget = QWidget()
+        text_layout = QVBoxLayout(text_widget)
+        text_layout.setContentsMargins(0, 0, 0, 0)
+        text_layout.setSpacing(5)
+        
+        title_label = QLabel(text)
+        title_label.setStyleSheet(f"""
+            QLabel {{
+                font-size: 12pt;
+                font-weight: bold;
+                color: {color};
+            }}
+        """)
+        
+        desc_label = QLabel(description)
+        desc_label.setStyleSheet("""
+            QLabel {
+                font-size: 9pt;
+                color: #666666;
+            }
+        """)
+        desc_label.setWordWrap(True)
+        
+        text_layout.addWidget(title_label)
+        text_layout.addWidget(desc_label)
+        
+        # 导出按钮
+        export_btn = QPushButton("导出")
+        export_btn.setStyleSheet(f"""
+            QPushButton {{
+                background-color: {color};
+                color: white;
+                border: none;
+                padding: 10px 25px;
+                border-radius: 6px;
+                font-weight: bold;
+                min-width: 80px;
+            }}
+            QPushButton:hover {{
+                background-color: {color}dd;
+            }}
+            QPushButton:pressed {{
+                background-color: {color}bb;
+            }}
+        """)
+        
+        layout.addWidget(icon_label)
+        layout.addWidget(text_widget, 1)
+        layout.addWidget(export_btn)
+        
+        # 连接按钮事件
+        if "CSV" in text:
+            export_btn.clicked.connect(self._export_csv)
+        elif "Excel" in text:
+            export_btn.clicked.connect(self._export_excel)
+        elif "PNG" in text:
+            export_btn.clicked.connect(self._export_png)
+        elif "PDF" in text:
+            export_btn.clicked.connect(self._export_pdf)
+        
+        return container
     
     def enable_export_buttons(self):
         """启用导出按钮（当有计算结果时调用）"""
