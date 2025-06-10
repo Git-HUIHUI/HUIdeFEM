@@ -1,5 +1,5 @@
 # GUI框架
-PyQt6>=6.4.0
+PyQt6>=6.0.0
 
 # 科学计算
 numpy>=1.21.0
@@ -9,7 +9,10 @@ scipy>=1.7.0
 matplotlib>=3.5.0
 
 # 网格剖分
-triangle>=20220202
+triangle>=20200424
 
 # 数据处理
-dataclasses>=0.6; python_version<"3.7"
+dataclasses>=0.6
+pandas>=1.3.0
+openpyxl>=3.0.0
+Pillow>=8.0.0

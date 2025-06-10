@@ -33,6 +33,9 @@ class InputPanel(QWidget):
         targets_widget, self.targets_table = self._create_tab_page("目标点", ["点名称", "X 坐标", "Y 坐标"])
         mesh_widget = self._create_mesh_settings_page()
 
+        # 创建导出页面
+        export_widget = self._create_export_page()
+        
         # 添加选项卡页面
         self.tab_widget.addTab(vertices_widget, "1. 顶点")
         self.tab_widget.addTab(segments_widget, "2. 线段")
@@ -40,6 +43,7 @@ class InputPanel(QWidget):
         self.tab_widget.addTab(bc_widget, "4. 边界")
         self.tab_widget.addTab(targets_widget, "5. 目标点")
         self.tab_widget.addTab(mesh_widget, "6. 网格设置")
+        self.tab_widget.addTab(export_widget, "7. 导出结果")
 
         # 连接按钮事件
         vertices_widget.findChild(QPushButton, "add_button").clicked.connect(self._add_vertex_row)
@@ -201,6 +205,23 @@ class InputPanel(QWidget):
         except (ValueError, AttributeError, IndexError, TypeError):
             return None
     
+    def clear_all_data(self):
+        """清除所有输入数据"""
+        self.vertices_table.setRowCount(0)
+        self.segments_table.setRowCount(0)
+        self.regions_table.setRowCount(0)
+        self.bc_table.setRowCount(0)
+        self.targets_table.setRowCount(0)
+        
+        # 重置网格设置为默认值
+        if hasattr(self, 'mesh_area_input'):
+            self.mesh_area_input.setText("10")
+        if hasattr(self, 'mesh_quality_input'):
+            self.mesh_quality_input.setText("30")
+        
+        # 发出数据变化信号
+        self.data_changed.emit()
+    
     def load_data_from_dict(self, data):
         """从字典数据加载到输入面板的各个表格中"""
         try:
@@ -339,3 +360,430 @@ class InputPanel(QWidget):
             # 如果输入无效，返回默认值
             return 'pq30a10A'  # 也要添加A标志
             raise e
+    
+    def _create_export_page(self):
+        """创建导出结果页面。"""
+        from PyQt6.QtWidgets import QFileDialog, QMessageBox
+        from PyQt6.QtCore import QDateTime
+        
+        widget = QWidget()
+        layout = QVBoxLayout(widget)
+        layout.setSpacing(20)
+        layout.setContentsMargins(15, 15, 15, 15)
+        
+        # 标题
+        title_label = QLabel("导出计算结果")
+        title_label.setStyleSheet("font-size: 14pt; font-weight: bold; color: #2c3e50;")
+        layout.addWidget(title_label)
+        
+        # 说明文字
+        info_label = QLabel("在完成有限元计算后，您可以将结果导出为CSV或Excel格式进行进一步分析。")
+        info_label.setStyleSheet("color: #7f8c8d; font-size: 10pt;")
+        info_label.setWordWrap(True)
+        layout.addWidget(info_label)
+        
+        # 导出按钮区域
+        buttons_layout = QVBoxLayout()
+        buttons_layout.setSpacing(15)
+        
+        # CSV导出按钮
+        self.export_csv_btn = QPushButton("📄 导出为CSV格式")
+        self.export_csv_btn.setMinimumHeight(50)
+        self.export_csv_btn.setStyleSheet("""
+            QPushButton {
+                background-color: #3498db;
+                color: white;
+                border: none;
+                border-radius: 8px;
+                font-size: 12pt;
+                font-weight: bold;
+                padding: 10px;
+            }
+            QPushButton:hover {
+                background-color: #2980b9;
+            }
+            QPushButton:disabled {
+                background-color: #bdc3c7;
+                color: #7f8c8d;
+            }
+        """)
+        self.export_csv_btn.setEnabled(False)
+        self.export_csv_btn.clicked.connect(self._export_csv)
+        
+        # Excel导出按钮
+        self.export_excel_btn = QPushButton("📊 导出为Excel格式")
+        self.export_excel_btn.setMinimumHeight(50)
+        self.export_excel_btn.setStyleSheet("""
+            QPushButton {
+                background-color: #27ae60;
+                color: white;
+                border: none;
+                border-radius: 8px;
+                font-size: 12pt;
+                font-weight: bold;
+                padding: 10px;
+            }
+            QPushButton:hover {
+                background-color: #229954;
+            }
+            QPushButton:disabled {
+                background-color: #bdc3c7;
+                color: #7f8c8d;
+            }
+        """)
+        self.export_excel_btn.setEnabled(False)
+        self.export_excel_btn.clicked.connect(self._export_excel)
+        
+        buttons_layout.addWidget(self.export_csv_btn)
+        buttons_layout.addWidget(self.export_excel_btn)
+        
+        # 图像导出按钮
+        self.export_png_btn = QPushButton("🖼️ 导出为PNG图像")
+        self.export_png_btn.setMinimumHeight(50)
+        self.export_png_btn.setStyleSheet("""
+            QPushButton {
+                background-color: #e67e22;
+                color: white;
+                border: none;
+                border-radius: 8px;
+                font-size: 12pt;
+                font-weight: bold;
+                padding: 10px;
+            }
+            QPushButton:hover {
+                background-color: #d35400;
+            }
+            QPushButton:disabled {
+                background-color: #bdc3c7;
+                color: #7f8c8d;
+            }
+        """)
+        self.export_png_btn.setEnabled(False)
+        self.export_png_btn.clicked.connect(self._export_png)
+        
+        self.export_pdf_btn = QPushButton("📄 导出为PDF文档")
+        self.export_pdf_btn.setMinimumHeight(50)
+        self.export_pdf_btn.setStyleSheet("""
+            QPushButton {
+                background-color: #8e44ad;
+                color: white;
+                border: none;
+                border-radius: 8px;
+                font-size: 12pt;
+                font-weight: bold;
+                padding: 10px;
+            }
+            QPushButton:hover {
+                background-color: #7d3c98;
+            }
+            QPushButton:disabled {
+                background-color: #bdc3c7;
+                color: #7f8c8d;
+            }
+        """)
+        self.export_pdf_btn.setEnabled(False)
+        self.export_pdf_btn.clicked.connect(self._export_pdf)
+        
+        buttons_layout.addWidget(self.export_png_btn)
+        buttons_layout.addWidget(self.export_pdf_btn)
+        
+        # 状态标签
+        self.export_status_label = QLabel("请先运行计算以生成结果数据")
+        self.export_status_label.setStyleSheet("color: #e74c3c; font-style: italic;")
+        self.export_status_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        
+        layout.addLayout(buttons_layout)
+        layout.addWidget(self.export_status_label)
+        layout.addStretch()
+        
+        return widget
+    
+    def enable_export_buttons(self):
+        """启用导出按钮（当有计算结果时调用）"""
+        if hasattr(self, 'export_csv_btn'):
+            self.export_csv_btn.setEnabled(True)
+        if hasattr(self, 'export_excel_btn'):
+            self.export_excel_btn.setEnabled(True)
+        if hasattr(self, 'export_png_btn'):
+            self.export_png_btn.setEnabled(True)
+        if hasattr(self, 'export_pdf_btn'):
+            self.export_pdf_btn.setEnabled(True)
+        if hasattr(self, 'export_status_label'):
+            self.export_status_label.setText("计算结果已准备就绪，可以导出")
+            self.export_status_label.setStyleSheet("color: #27ae60; font-style: italic;")
+    
+    def disable_export_buttons(self):
+        """禁用导出按钮（当没有计算结果时调用）"""
+        if hasattr(self, 'export_csv_btn'):
+            self.export_csv_btn.setEnabled(False)
+        if hasattr(self, 'export_excel_btn'):
+            self.export_excel_btn.setEnabled(False)
+        if hasattr(self, 'export_png_btn'):
+            self.export_png_btn.setEnabled(False)
+        if hasattr(self, 'export_pdf_btn'):
+            self.export_pdf_btn.setEnabled(False)
+        if hasattr(self, 'export_status_label'):
+            self.export_status_label.setText("请先运行计算以生成结果数据")
+            self.export_status_label.setStyleSheet("color: #e74c3c; font-style: italic;")
+    
+    def _export_csv(self):
+        """导出CSV格式"""
+        from PyQt6.QtWidgets import QFileDialog, QMessageBox
+        
+        if not self.controller.result or not hasattr(self.controller.result, 'mesh') or not self.controller.result.mesh:
+            QMessageBox.warning(self, "警告", "没有可导出的计算结果，请先运行计算。")
+            return
+        
+        file_path, _ = QFileDialog.getSaveFileName(
+            self, "导出结果为CSV", "", "CSV文件 (*.csv)"
+        )
+        
+        if not file_path:
+            return
+        
+        try:
+            self._export_to_csv(file_path)
+            QMessageBox.information(self, "成功", f"结果已成功导出到：{file_path}")
+            self.export_status_label.setText(f"已导出到：{file_path}")
+        except Exception as e:
+            QMessageBox.critical(self, "错误", f"导出CSV文件时发生错误：{str(e)}")
+    
+    def _export_excel(self):
+        """导出Excel格式"""
+        from PyQt6.QtWidgets import QFileDialog, QMessageBox
+        
+        if not self.controller.result or not hasattr(self.controller.result, 'mesh') or not self.controller.result.mesh:
+            QMessageBox.warning(self, "警告", "没有可导出的计算结果，请先运行计算。")
+            return
+        
+        file_path, _ = QFileDialog.getSaveFileName(
+            self, "导出结果为Excel", "", "Excel文件 (*.xlsx)"
+        )
+        
+        if not file_path:
+            return
+        
+        try:
+            self._export_to_excel(file_path)
+            QMessageBox.information(self, "成功", f"结果已成功导出到：{file_path}")
+            self.export_status_label.setText(f"已导出到：{file_path}")
+        except Exception as e:
+            QMessageBox.critical(self, "错误", f"导出Excel文件时发生错误：{str(e)}")
+    
+    def _export_to_csv(self, file_path):
+        """将结果数据导出为CSV格式"""
+        import csv
+        from PyQt6.QtCore import QDateTime
+        
+        result = self.controller.result
+        
+        with open(file_path, 'w', newline='', encoding='utf-8-sig') as csvfile:
+            writer = csv.writer(csvfile)
+            
+            # 写入标题
+            writer.writerow(['SlopeFEM_2D 计算结果导出'])
+            writer.writerow(['导出时间:', QDateTime.currentDateTime().toString('yyyy-MM-dd hh:mm:ss')])
+            writer.writerow([])
+            
+            # 目标点位移结果
+            if result.target_displacements:
+                writer.writerow(['目标点位移结果'])
+                writer.writerow(['点名称', '水平位移 (m)', '竖直位移 (m)'])
+                for name, (dx, dy) in result.target_displacements.items():
+                    writer.writerow([name, f'{dx:.6e}', f'{dy:.6e}'])
+                writer.writerow([])
+            
+            # 节点位移结果
+            if len(result.displacements) > 0:
+                writer.writerow(['节点位移结果'])
+                writer.writerow(['节点ID', 'X坐标 (m)', 'Y坐标 (m)', '水平位移 (m)', '竖直位移 (m)'])
+                displacements_2d = result.displacements.reshape(-1, 2)
+                for i, (node, disp) in enumerate(zip(result.mesh['vertices'], displacements_2d)):
+                    writer.writerow([i, f'{node[0]:.6f}', f'{node[1]:.6f}', f'{disp[0]:.6e}', f'{disp[1]:.6e}'])
+                writer.writerow([])
+            
+            # 单元应力结果
+            if len(result.stresses) > 0:
+                writer.writerow(['单元应力结果'])
+                writer.writerow(['单元ID', '冯·米塞斯应力 (Pa)'])
+                for i, stress in enumerate(result.stresses):
+                    writer.writerow([i, f'{stress:.6e}'])
+    
+    def _export_to_excel(self, file_path):
+        """将结果数据导出为Excel格式"""
+        try:
+            import pandas as pd
+        except ImportError:
+            raise ImportError("需要安装pandas库才能导出Excel文件。请运行：pip install pandas openpyxl")
+        
+        result = self.controller.result
+        
+        with pd.ExcelWriter(file_path, engine='openpyxl') as writer:
+            # 目标点位移结果
+            if result.target_displacements:
+                target_data = []
+                for name, (dx, dy) in result.target_displacements.items():
+                    target_data.append({
+                        '点名称': name,
+                        '水平位移 (m)': dx,
+                        '竖直位移 (m)': dy
+                    })
+                df_targets = pd.DataFrame(target_data)
+                df_targets.to_excel(writer, sheet_name='目标点位移', index=False)
+            
+            # 节点位移结果
+            if len(result.displacements) > 0:
+                node_data = []
+                displacements_2d = result.displacements.reshape(-1, 2)
+                for i, (node, disp) in enumerate(zip(result.mesh['vertices'], displacements_2d)):
+                    node_data.append({
+                        '节点ID': i,
+                        'X坐标 (m)': node[0],
+                        'Y坐标 (m)': node[1],
+                        '水平位移 (m)': disp[0],
+                        '竖直位移 (m)': disp[1]
+                    })
+                df_nodes = pd.DataFrame(node_data)
+                df_nodes.to_excel(writer, sheet_name='节点位移', index=False)
+            
+            # 单元应力结果
+            if len(result.stresses) > 0:
+                stress_data = []
+                for i, stress in enumerate(result.stresses):
+                    stress_data.append({
+                        '单元ID': i,
+                        '冯·米塞斯应力 (Pa)': stress
+                    })
+                df_stress = pd.DataFrame(stress_data)
+                df_stress.to_excel(writer, sheet_name='单元应力', index=False)
+    
+    def _export_png(self):
+        """导出PNG格式图像 - 导出所有结果类型"""
+        from PyQt6.QtWidgets import QFileDialog, QMessageBox
+        import os
+        
+        if not self.controller.result or not hasattr(self.controller.result, 'mesh') or not self.controller.result.mesh:
+            QMessageBox.warning(self, "警告", "没有可导出的计算结果，请先运行计算。")
+            return
+        
+        file_path, _ = QFileDialog.getSaveFileName(
+            self, "导出所有结果图像为PNG", "", "PNG图像文件 (*.png)"
+        )
+        
+        if not file_path:
+            return
+        
+        try:
+            exported_files = self._export_all_results_to_images(file_path, 'png')
+            file_list = "\n".join(exported_files)
+            QMessageBox.information(self, "成功", f"所有结果图像已成功导出：\n{file_list}")
+            self.export_status_label.setText(f"已导出{len(exported_files)}个PNG文件")
+        except Exception as e:
+            QMessageBox.critical(self, "错误", f"导出PNG文件时发生错误：{str(e)}")
+    
+    def _export_pdf(self):
+        """导出PDF格式文档 - 导出所有结果类型到多页PDF"""
+        from PyQt6.QtWidgets import QFileDialog, QMessageBox
+        
+        if not self.controller.result or not hasattr(self.controller.result, 'mesh') or not self.controller.result.mesh:
+            QMessageBox.warning(self, "警告", "没有可导出的计算结果，请先运行计算。")
+            return
+        
+        file_path, _ = QFileDialog.getSaveFileName(
+            self, "导出所有结果为PDF", "", "PDF文档文件 (*.pdf)"
+        )
+        
+        if not file_path:
+            return
+        
+        try:
+            self._export_all_results_to_pdf(file_path)
+            QMessageBox.information(self, "成功", f"所有结果已成功导出到多页PDF：{file_path}")
+            self.export_status_label.setText(f"已导出到：{file_path}")
+        except Exception as e:
+            QMessageBox.critical(self, "错误", f"导出PDF文件时发生错误：{str(e)}")
+    
+    def _export_all_results_to_images(self, base_file_path, format_type):
+        """导出所有结果类型为单独的图像文件"""
+        import os
+        
+        # 定义所有结果类型
+        result_types = [
+            ('stress', 'Von_Mises应力'),
+            ('disp_x_original', '水平位移_原始'),
+            ('disp_y_original', '竖直位移_原始'),
+            ('disp_x', '水平位移_放大'),
+            ('disp_y', '竖直位移_放大')
+        ]
+        
+        # 获取主窗口的画布组件
+        main_window = self.window()
+        if not hasattr(main_window, 'canvas'):
+            raise Exception("无法访问画布组件")
+        
+        canvas_widget = main_window.canvas
+        exported_files = []
+        
+        # 获取文件路径的目录和基础名称
+        base_dir = os.path.dirname(base_file_path)
+        base_name = os.path.splitext(os.path.basename(base_file_path))[0]
+        
+        # 设置高分辨率参数
+        dpi = 300 if format_type == 'png' else 150
+        
+        for plot_type, type_name in result_types:
+            # 绘制当前结果类型
+            canvas_widget.plot_result(self.controller.result, plot_type)
+            
+            # 生成文件名
+            file_name = f"{base_name}_{type_name}.{format_type}"
+            file_path = os.path.join(base_dir, file_name)
+            
+            # 保存图像
+            canvas_widget.figure.savefig(
+                file_path,
+                format=format_type,
+                dpi=dpi,
+                bbox_inches='tight',
+                facecolor='white',
+                edgecolor='none'
+            )
+            
+            exported_files.append(file_path)
+        
+        return exported_files
+    
+    def _export_all_results_to_pdf(self, file_path):
+        """导出所有结果类型到多页PDF文件"""
+        from matplotlib.backends.backend_pdf import PdfPages
+        
+        # 定义所有结果类型
+        result_types = [
+            ('stress', 'Von Mises应力'),
+            ('disp_x_original', '水平位移_原始'),
+            ('disp_y_original', '竖直位移_原始'),
+            ('disp_x', '水平位移_放大'),
+            ('disp_y', '竖直位移_放大')
+        ]
+        
+        # 获取主窗口的画布组件
+        main_window = self.window()
+        if not hasattr(main_window, 'canvas'):
+            raise Exception("无法访问画布组件")
+        
+        canvas_widget = main_window.canvas
+        
+        # 创建多页PDF
+        with PdfPages(file_path) as pdf:
+            for plot_type, type_name in result_types:
+                # 绘制当前结果类型
+                canvas_widget.plot_result(self.controller.result, plot_type)
+                
+                # 保存当前页面到PDF
+                pdf.savefig(
+                    canvas_widget.figure,
+                    dpi=150,
+                    bbox_inches='tight',
+                    facecolor='white',
+                    edgecolor='none'
+                )
