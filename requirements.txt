@@ -16,3 +16,6 @@ dataclasses>=0.6
 pandas>=1.3.0
 openpyxl>=3.0.0
 Pillow>=8.0.0
+
+# 打包工具
+PyInstaller>=5.0.0

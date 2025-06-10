@@ -603,14 +603,15 @@ class InputPanel(QWidget):
         
         # 根据按钮类型选择对应的图标文件
         icon_path = ""
+        # 修复后的代码
         if "CSV" in text:
-            icon_path = "d:/SlopeFEM_2D/resources/icons/csv.png"
+            icon_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'resources', 'icons', 'csv.png')
         elif "Excel" in text:
-            icon_path = "d:/SlopeFEM_2D/resources/icons/Excel.png"
+            icon_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'resources', 'icons', 'Excel.png')
         elif "PNG" in text:
-            icon_path = "d:/SlopeFEM_2D/resources/icons/png.png"
+            icon_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'resources', 'icons', 'png.png')
         elif "PDF" in text:
-            icon_path = "d:/SlopeFEM_2D/resources/icons/pdf.png"
+            icon_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'resources', 'icons', 'pdf.png')
         
         # 加载并设置图标
         if icon_path and os.path.exists(icon_path):
