@@ -297,9 +297,9 @@ class CanvasWidget(QWidget):
         # 绘制云图
         if values is not None:
             if values.ndim == 1 and len(values) == len(elements): # 单元数据
-                cax = self.ax.tripcolor(deformed_nodes[:, 0], deformed_nodes[:, 1], elements, facecolors=values, cmap='jet')
+                cax = self.ax.tripcolor(deformed_nodes[:, 0], deformed_nodes[:, 1], elements, facecolors=values, cmap='jet_r')
             elif values.ndim == 1 and len(values) == len(nodes): # 节点数据
-                cax = self.ax.tricontourf(deformed_nodes[:, 0], deformed_nodes[:, 1], elements, values, cmap='jet', levels=20)
+                cax = self.ax.tricontourf(deformed_nodes[:, 0], deformed_nodes[:, 1], elements, values, cmap='jet_r', levels=20)
             
             # 在固定的colorbar轴上创建colorbar
             self.cbar_ax.set_visible(True)

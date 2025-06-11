@@ -407,9 +407,10 @@ class VTKCanvasWidget(QWidget):
         mapper.SetScalarModeToUseCellData() if plot_type == 'stress' else mapper.SetScalarModeToUsePointData()
         
         # 设置颜色映射 - 完全匹配Matplotlib的jet颜色映射
+        # 设置颜色映射 - 红色表示大值，蓝色表示小值
         lut = vtk.vtkLookupTable()
-        # 使用与Matplotlib jet完全一致的颜色映射
-        lut.SetHueRange(0.667, 0.0)  # 蓝色到红色，与jet一致
+        # 反转颜色映射：红色到蓝色（大值到小值）
+        lut.SetHueRange(0.0, 0.667)  # 红色到蓝色，反转后红色表示大值
         lut.SetSaturationRange(1.0, 1.0)
         lut.SetValueRange(1.0, 1.0)
         lut.SetNumberOfTableValues(256)
