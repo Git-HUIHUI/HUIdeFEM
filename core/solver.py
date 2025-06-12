@@ -106,6 +106,9 @@ class FemSolver:
         if not self.problem.loads:
             return
             
+        # 使用字典记录每个节点应该承受的总荷载，避免重复施加
+        node_loads = {}  # {node_id: total_load}
+        
         loaded_nodes = self._find_loaded_nodes()
         
         for seg_id, node_ids in loaded_nodes.items():
@@ -113,13 +116,54 @@ class FemSolver:
             p1, p2 = self.problem.vertices[self.problem.segments[seg_id][0]], self.problem.vertices[self.problem.segments[seg_id][1]]
             seg_length = np.linalg.norm(np.array(p1) - np.array(p2))
             
-            # 均布荷载等效分配到两个端点上
-            nodal_force = seg_length * load_val / 2
-            
-            # 假设荷载是竖直向下的
-            for node_id in node_ids:
-                dof = node_id * 2 + 1 # Y方向自由度
-                self.F[dof] -= nodal_force # 荷载向下为负
+            # 计算该线段上每个节点应该承受的荷载
+            if len(node_ids) == 0:
+                continue
+            elif len(node_ids) == 1:
+                # 如果线段上只有一个节点（不太可能，但为了健壮性）
+                nodal_force = seg_length * load_val
+                node_id = node_ids[0]
+                if node_id not in node_loads:
+                    node_loads[node_id] = 0.0
+                node_loads[node_id] += nodal_force
+            else:
+                # 线段上有多个节点，需要按照节点间距离分配荷载
+                # 对于均布荷载，可以按照节点在线段上的分布来分配
+                
+                # 获取线段上所有节点的坐标
+                seg_nodes = [(node_id, self.nodes[node_id]) for node_id in node_ids]
+                
+                # 按照在线段上的位置排序
+                seg_vector = np.array(p2) - np.array(p1)
+                seg_nodes.sort(key=lambda x: np.dot(np.array(x[1]) - np.array(p1), seg_vector))
+                
+                # 为每个节点分配荷载
+                for i, (node_id, node_coord) in enumerate(seg_nodes):
+                    if i == 0:  # 第一个节点
+                        if len(seg_nodes) == 1:
+                            segment_length = seg_length
+                        else:
+                            next_coord = seg_nodes[i+1][1]
+                            segment_length = np.linalg.norm(np.array(next_coord) - np.array(node_coord)) / 2
+                    elif i == len(seg_nodes) - 1:  # 最后一个节点
+                        prev_coord = seg_nodes[i-1][1]
+                        segment_length = np.linalg.norm(np.array(node_coord) - np.array(prev_coord)) / 2
+                    else:  # 中间节点
+                        prev_coord = seg_nodes[i-1][1]
+                        next_coord = seg_nodes[i+1][1]
+                        segment_length = (np.linalg.norm(np.array(node_coord) - np.array(prev_coord)) + 
+                                        np.linalg.norm(np.array(next_coord) - np.array(node_coord))) / 2
+                    
+                    nodal_force = segment_length * load_val
+                    
+                    if node_id not in node_loads:
+                        node_loads[node_id] = 0.0
+                    node_loads[node_id] += nodal_force
+        
+        # 将计算出的节点荷载施加到全局荷载向量中
+        for node_id, total_load in node_loads.items():
+            dof = node_id * 2 + 1  # Y方向自由度
+            self.F[dof] -= total_load  # 荷载向下为负
 
     def _find_constrained_nodes(self):
         """在网格中找到所有被约束的节点。"""
