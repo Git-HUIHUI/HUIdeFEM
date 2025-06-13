@@ -5,6 +5,7 @@ from PyQt6.QtCore import Qt
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
+from utils.resource_manager import get_icon_path
 
 # 设置matplotlib中文字体支持
 plt.rcParams['font.sans-serif'] = ['SimHei', 'Microsoft YaHei', 'DejaVu Sans']
@@ -384,7 +385,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(get_icon_path('显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -393,7 +394,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(get_icon_path('显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -402,16 +403,23 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(get_icon_path('显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
+    self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
+    self.result_type_combo.currentTextChanged.connect(self.change_result_type)
+    # 为显示内容添加图标
+    for i in range(self.result_type_combo.count()):
+        self.result_type_combo.setItemIcon(i, QIcon(get_icon_path('显示内容.png')))
+    result_control_panel.addWidget(self.result_type_combo)
+    
     result_control_panel.addWidget(QLabel("显示内容:"))
     self.result_type_combo = QComboBox()
     self.result_type_combo.addItems(["应力", "水平位移", "竖直位移"])
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(get_icon_path('显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -420,7 +428,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(get_icon_path('显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -429,7 +437,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(get_icon_path('显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -438,7 +446,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(get_icon_path('显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -447,7 +455,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(get_icon_path('显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -456,7 +464,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(get_icon_path('显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -465,7 +473,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(get_icon_path('显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -474,7 +482,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(get_icon_path('显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -483,7 +491,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(get_icon_path('显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -492,7 +500,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(get_icon_path('显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -501,7 +509,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(get_icon_path('显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -510,7 +518,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(get_icon_path('显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -519,7 +527,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(get_icon_path('显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -528,7 +536,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(get_icon_path('显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -537,7 +545,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(get_icon_path('显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -546,7 +554,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(get_icon_path('显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -555,7 +563,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(get_icon_path('显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -564,7 +572,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(get_icon_path('显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -573,7 +581,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(get_icon_path('显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -582,7 +590,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(get_icon_path('显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -591,7 +599,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(get_icon_path('显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -600,7 +608,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(get_icon_path('显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -609,7 +617,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(get_icon_path('显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -618,7 +626,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(get_icon_path('显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -627,7 +635,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(get_icon_path('显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -636,7 +644,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(get_icon_path('显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -645,7 +653,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(get_icon_path('显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -654,7 +662,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(get_icon_path('显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -663,7 +671,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(get_icon_path('显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -672,7 +680,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -681,7 +689,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -690,7 +698,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -699,7 +707,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -708,7 +716,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -717,7 +725,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -726,7 +734,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -735,7 +743,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -744,7 +752,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -753,7 +761,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -762,7 +770,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -771,7 +779,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -780,7 +788,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -789,7 +797,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -798,7 +806,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -807,7 +815,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -816,7 +824,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -825,7 +833,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -834,7 +842,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -843,7 +851,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -852,7 +860,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -861,7 +869,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -870,7 +878,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -879,7 +887,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -888,7 +896,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -897,7 +905,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -906,7 +914,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -915,7 +923,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -924,7 +932,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -933,7 +941,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -942,7 +950,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -951,7 +959,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -960,7 +968,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -969,7 +977,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -978,7 +986,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -987,7 +995,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -996,7 +1004,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -1005,7 +1013,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -1014,7 +1022,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -1023,7 +1031,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -1032,7 +1040,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -1041,7 +1049,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -1050,7 +1058,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -1059,7 +1067,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -1068,7 +1076,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -1077,7 +1085,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -1086,7 +1094,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -1095,7 +1103,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -1104,7 +1112,7 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
     result_control_panel.addWidget(self.result_type_combo)
     
     result_control_panel.addWidget(QLabel("显示内容:"))
@@ -1113,4 +1121,4 @@ def setup_ui(self):
     self.result_type_combo.currentTextChanged.connect(self.change_result_type)
     # 为显示内容添加图标
     for i in range(self.result_type_combo.count()):
-        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(icon_path, '显示内容.png')))
+        self.result_type_combo.setItemIcon(i, QIcon(os.path.join(get_icon_path(), '显示内容.png')))
