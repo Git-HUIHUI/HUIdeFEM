@@ -9,6 +9,9 @@ import os
 # 保留抽象基类定义，但不用于继承
 from abc import ABC, abstractmethod
 
+# 导入资源管理器
+from utils.resource_manager import safe_get_icon_path
+
 class BaseVisualizationWidget(ABC):
     """可视化组件的抽象基类（仅作为接口参考）"""
     
@@ -36,20 +39,19 @@ class VTKCanvasWidget(QWidget):
         """设置用户界面"""
         layout = QVBoxLayout(self)
         
-        # 获取图标路径
-        icon_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'resources', 'icons')
-        
         # 设置字体
         font = QFont()
         font.setPointSize(10)
-        
+
         # 控制面板
         control_panel = QHBoxLayout()
         control_panel.setSpacing(15)  # 增加间距
-        
-        # 视图模式选择
+
+        # 视图模式选择 - 使用资源管理器
         view_icon = QLabel()
-        view_icon.setPixmap(QIcon(os.path.join(icon_path, '视图模式.png')).pixmap(24, 24))  # 放大图标
+        view_icon_path = safe_get_icon_path('视图模式.png')
+        if view_icon_path:
+            view_icon.setPixmap(QIcon(view_icon_path).pixmap(24, 24))  # 放大图标
         control_panel.addWidget(view_icon)
         
         view_label = QLabel("视图模式:")
@@ -63,9 +65,11 @@ class VTKCanvasWidget(QWidget):
         self.view_combo.setFont(font)
         control_panel.addWidget(self.view_combo)
         
-        # 渲染质量选择
+        # 渲染质量选择 - 使用资源管理器
         quality_icon = QLabel()
-        quality_icon.setPixmap(QIcon(os.path.join(icon_path, '渲染质量.png')).pixmap(24, 24))  # 放大图标
+        quality_icon_path = safe_get_icon_path('渲染质量.png')
+        if quality_icon_path:
+            quality_icon.setPixmap(QIcon(quality_icon_path).pixmap(24, 24))  # 放大图标
         control_panel.addWidget(quality_icon)
         
         quality_label = QLabel("渲染质量:")
@@ -79,9 +83,11 @@ class VTKCanvasWidget(QWidget):
         self.quality_combo.setFont(font)
         control_panel.addWidget(self.quality_combo)
         
-        # 重置视图按钮
+        # 重置视图按钮 - 使用资源管理器
         reset_btn = QPushButton("重置视图")
-        reset_btn.setIcon(QIcon(os.path.join(icon_path, '重置视图.png')))
+        reset_icon_path = safe_get_icon_path('重置视图.png')
+        if reset_icon_path:
+            reset_btn.setIcon(QIcon(reset_icon_path))
         reset_btn.setIconSize(QSize(20, 20))  # 设置按钮图标大小
         reset_btn.setMinimumHeight(35)  # 增加按钮高度
         reset_btn.setFont(font)

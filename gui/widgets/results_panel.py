@@ -3,6 +3,9 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon, QFont  # 确保QFont已导入
 import os
 
+# 导入资源管理器
+from utils.resource_manager import safe_get_icon_path
+
 class ResultsPanel(QWidget):
     """用于显示数值计算结果的面板。"""
     
@@ -16,24 +19,23 @@ class ResultsPanel(QWidget):
         main_layout = QVBoxLayout(self)
         main_layout.setSpacing(10)  # 增加间距
         
-        # 获取图标路径
-        icon_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'resources', 'icons')
-        
         # 设置字体
         title_font = QFont()
         title_font.setPointSize(12)
         title_font.setBold(True)
-        
+
         content_font = QFont()
         content_font.setPointSize(10)
-        
+
         # 创建带图标的标题布局
         title_layout = QHBoxLayout()
         title_layout.setSpacing(8)
-        
-        # 添加图标标签
+
+        # 添加图标标签 - 使用资源管理器
         icon_label = QLabel()
-        icon_label.setPixmap(QIcon(os.path.join(icon_path, '数值结果.png')).pixmap(24, 24))  # 放大图标
+        icon_path = safe_get_icon_path('数值结果.png')
+        if icon_path:
+            icon_label.setPixmap(QIcon(icon_path).pixmap(24, 24))  # 放大图标
         title_layout.addWidget(icon_label)
         
         # 添加标题文本

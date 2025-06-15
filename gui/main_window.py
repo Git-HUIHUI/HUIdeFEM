@@ -1,10 +1,13 @@
-from PyQt6.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, 
-                             QPushButton, QComboBox, QLabel, QFileDialog, 
+from PyQt6.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
+                             QPushButton, QComboBox, QLabel, QFileDialog,
                              QSplitter, QSizePolicy, QMessageBox)
 from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtGui import QAction, QIcon
 import json
 import os
+
+# 导入资源管理器
+from utils.resource_manager import get_icon_path, get_example_path, safe_get_icon_path
 
 from gui.widgets.input_panel import InputPanel
 # 在文件顶部的导入部分，移除或注释掉原来的导入
@@ -310,29 +313,35 @@ class MainWindow(QMainWindow):
         
         # 导出功能已移至选项卡页面，不再需要菜单动作
         
-        # 设置图标
-        icon_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'resources', 'icons')
-        
+        # 设置图标 - 使用资源管理器
         # 为各个动作设置图标
-        if os.path.exists(os.path.join(icon_path, '新建项目.png')):
-            self.new_action.setIcon(QIcon(os.path.join(icon_path, '新建项目.png')))
-        if os.path.exists(os.path.join(icon_path, '打开项目.png')):
-            self.open_action.setIcon(QIcon(os.path.join(icon_path, '打开项目.png')))
-        if os.path.exists(os.path.join(icon_path, '保存项目.png')):
-            self.save_action.setIcon(QIcon(os.path.join(icon_path, '保存项目.png')))
-            self.save_as_action.setIcon(QIcon(os.path.join(icon_path, '保存项目.png')))
-        if os.path.exists(os.path.join(icon_path, '加载预设案例.png')):
-            self.load_example_action.setIcon(QIcon(os.path.join(icon_path, '加载预设案例.png')))
-        if os.path.exists(os.path.join(icon_path, '计算.png')):
-            self.calc_action = QAction("计算", self)
-            self.calc_action.setIcon(QIcon(os.path.join(icon_path, '计算.png')))
-        else:
-            self.calc_action = QAction("计算", self)
-        
+        new_icon = safe_get_icon_path('新建项目.png')
+        if new_icon:
+            self.new_action.setIcon(QIcon(new_icon))
+
+        open_icon = safe_get_icon_path('打开项目.png')
+        if open_icon:
+            self.open_action.setIcon(QIcon(open_icon))
+
+        save_icon = safe_get_icon_path('保存项目.png')
+        if save_icon:
+            self.save_action.setIcon(QIcon(save_icon))
+            self.save_as_action.setIcon(QIcon(save_icon))
+
+        example_icon = safe_get_icon_path('加载预设案例.png')
+        if example_icon:
+            self.load_example_action.setIcon(QIcon(example_icon))
+
+        calc_icon = safe_get_icon_path('计算.png')
+        self.calc_action = QAction("计算", self)
+        if calc_icon:
+            self.calc_action.setIcon(QIcon(calc_icon))
+
         # 其他操作
         self.material_action = QAction("材料库...", self)
-        if os.path.exists(os.path.join(icon_path, '材料库.png')):
-            self.material_action.setIcon(QIcon(os.path.join(icon_path, '材料库.png')))
+        material_icon = safe_get_icon_path('材料库.png')
+        if material_icon:
+            self.material_action.setIcon(QIcon(material_icon))
         
         self.about_action = QAction("关于", self)
         
@@ -517,9 +526,9 @@ class MainWindow(QMainWindow):
     def _load_example_case(self):
         """加载预设的边坡分析案例"""
         try:
-            # 获取例题文件路径
-            example_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'examples', 'slope_problem.json')
-            
+            # 获取例题文件路径 - 使用资源管理器
+            example_file = get_example_path('slope_problem.json')
+
             if not os.path.exists(example_file):
                 QMessageBox.warning(self, "警告", "预设案例文件不存在！")
                 return

@@ -2,12 +2,15 @@ import os
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtWidgets import (
-    QWidget, QVBoxLayout, QHBoxLayout, QTabWidget, QTableWidget, 
-    QTableWidgetItem, QPushButton, QComboBox, QLabel, QSpinBox, 
+    QWidget, QVBoxLayout, QHBoxLayout, QTabWidget, QTableWidget,
+    QTableWidgetItem, QPushButton, QComboBox, QLabel, QSpinBox,
     QDoubleSpinBox, QCheckBox, QHeaderView, QFormLayout, QLineEdit  # 添加 QFormLayout 和 QLineEdit
 )
 from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtGui import QIcon
+
+# 导入资源管理器
+from utils.resource_manager import get_icon_path, safe_get_icon_path
 
 class InputPanel(QWidget):
     """
@@ -63,9 +66,6 @@ class InputPanel(QWidget):
             }
         """)
         
-        # 获取图标路径
-        icon_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'resources', 'icons')
-        
         # 创建各个选项卡页面
         vertices_widget, self.vertices_table = self._create_tab_page("定义顶点", ["ID", "X 坐标", "Y 坐标"])
         segments_widget, self.segments_table = self._create_tab_page("定义线段", ["ID", "起始点 ID", "结束点 ID"])
@@ -74,35 +74,42 @@ class InputPanel(QWidget):
         targets_widget, self.targets_table = self._create_tab_page("目标点", ["点名称", "X 坐标", "Y 坐标"])
         mesh_widget = self._create_mesh_settings_page()
         export_widget = self._create_export_page()
-        
-        # 添加选项卡页面并设置图标
+
+        # 添加选项卡页面并设置图标 - 使用资源管理器
         self.tab_widget.addTab(vertices_widget, "1. 顶点")
-        if os.path.exists(os.path.join(icon_path, '顶点.png')):
-            self.tab_widget.setTabIcon(0, QIcon(os.path.join(icon_path, '顶点.png')))
-            
+        vertices_icon = safe_get_icon_path('顶点.png')
+        if vertices_icon:
+            self.tab_widget.setTabIcon(0, QIcon(vertices_icon))
+
         self.tab_widget.addTab(segments_widget, "2. 线段")
-        if os.path.exists(os.path.join(icon_path, '线段.png')):
-            self.tab_widget.setTabIcon(1, QIcon(os.path.join(icon_path, '线段.png')))
-            
+        segments_icon = safe_get_icon_path('线段.png')
+        if segments_icon:
+            self.tab_widget.setTabIcon(1, QIcon(segments_icon))
+
         self.tab_widget.addTab(regions_widget, "3. 区域")
-        if os.path.exists(os.path.join(icon_path, '区域.png')):
-            self.tab_widget.setTabIcon(2, QIcon(os.path.join(icon_path, '区域.png')))
-            
+        regions_icon = safe_get_icon_path('区域.png')
+        if regions_icon:
+            self.tab_widget.setTabIcon(2, QIcon(regions_icon))
+
         self.tab_widget.addTab(bc_widget, "4. 边界")
-        if os.path.exists(os.path.join(icon_path, '边界.png')):
-            self.tab_widget.setTabIcon(3, QIcon(os.path.join(icon_path, '边界.png')))
-            
+        bc_icon = safe_get_icon_path('边界.png')
+        if bc_icon:
+            self.tab_widget.setTabIcon(3, QIcon(bc_icon))
+
         self.tab_widget.addTab(targets_widget, "5. 目标点")
-        if os.path.exists(os.path.join(icon_path, '目标点.png')):
-            self.tab_widget.setTabIcon(4, QIcon(os.path.join(icon_path, '目标点.png')))
-            
+        targets_icon = safe_get_icon_path('目标点.png')
+        if targets_icon:
+            self.tab_widget.setTabIcon(4, QIcon(targets_icon))
+
         self.tab_widget.addTab(mesh_widget, "6. 网格设置")
-        if os.path.exists(os.path.join(icon_path, '网格设置.png')):
-            self.tab_widget.setTabIcon(5, QIcon(os.path.join(icon_path, '网格设置.png')))
-            
+        mesh_icon = safe_get_icon_path('网格设置.png')
+        if mesh_icon:
+            self.tab_widget.setTabIcon(5, QIcon(mesh_icon))
+
         self.tab_widget.addTab(export_widget, "7. 导出结果")
-        if os.path.exists(os.path.join(icon_path, '导出结果.png')):
-            self.tab_widget.setTabIcon(6, QIcon(os.path.join(icon_path, '导出结果.png')))
+        export_icon = safe_get_icon_path('导出结果.png')
+        if export_icon:
+            self.tab_widget.setTabIcon(6, QIcon(export_icon))
 
         # 连接按钮事件
         vertices_widget.findChild(QPushButton, "add_button").clicked.connect(self._add_vertex_row)
@@ -601,20 +608,19 @@ class InputPanel(QWidget):
         # 按钮图标区域 - 使用实际图标文件
         icon_label = QLabel()
         
-        # 根据按钮类型选择对应的图标文件
+        # 根据按钮类型选择对应的图标文件 - 使用资源管理器
         icon_path = ""
-        # 修复后的代码
         if "CSV" in text:
-            icon_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'resources', 'icons', 'csv.png')
+            icon_path = safe_get_icon_path('csv.png')
         elif "Excel" in text:
-            icon_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'resources', 'icons', 'Excel.png')
+            icon_path = safe_get_icon_path('Excel.png')
         elif "PNG" in text:
-            icon_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'resources', 'icons', 'png.png')
+            icon_path = safe_get_icon_path('png.png')
         elif "PDF" in text:
-            icon_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'resources', 'icons', 'pdf.png')
-        
+            icon_path = safe_get_icon_path('pdf.png')
+
         # 加载并设置图标
-        if icon_path and os.path.exists(icon_path):
+        if icon_path:
             pixmap = QPixmap(icon_path)
             # 缩放图标到合适大小
             scaled_pixmap = pixmap.scaled(32, 32, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)

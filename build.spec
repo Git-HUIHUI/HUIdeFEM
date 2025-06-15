@@ -1,14 +1,24 @@
 # -*- mode: python ; coding: utf-8 -*-
+"""
+SlopeFEM_2D PyInstaller 构建配置文件
+优化后的配置，支持修复的资源路径管理
+"""
+
+import os
 
 block_cipher = None
 
+# 获取项目根目录
+project_root = os.path.dirname(os.path.abspath(SPEC))
+
 a = Analysis(
     ['main.py'],
-    pathex=[],
+    pathex=[project_root],  # 添加项目根目录到路径
     binaries=[],
     datas=[
         ('resources', 'resources'),  # 包含资源文件夹
         ('examples', 'examples'),    # 包含示例文件
+        ('utils', 'utils'),          # 确保utils模块被包含
     ],
     # 在hiddenimports中添加VTK相关模块
     hiddenimports=[
@@ -26,9 +36,16 @@ a = Analysis(
         'vtkmodules.util.numpy_support',
         'vtkmodules.numpy_interface',
         'vtkmodules.numpy_interface.dataset_adapter',
+        'PyQt6.QtCore',
+        'PyQt6.QtGui',
+        'PyQt6.QtWidgets',
+        'PyQt6.QtSvg',
+        'PyQt6.QtPrintSupport',
     ],
     hookspath=[],
-    hooksconfig={},
+    hooksconfig={
+        'matplotlib': {'backends': ['QtAgg', 'SVG']},
+    },
     runtime_hooks=[],
     excludes=[],
     win_no_prefer_redirects=False,

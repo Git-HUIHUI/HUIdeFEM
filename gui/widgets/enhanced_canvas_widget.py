@@ -5,6 +5,9 @@ import os
 from .canvas_widget import CanvasWidget
 from .vtk_canvas_widget import VTKCanvasWidget, BaseVisualizationWidget
 
+# 导入资源管理器
+from utils.resource_manager import safe_get_icon_path
+
 class EnhancedCanvasWidget(QWidget):
     """增强的画布组件，支持matplotlib和VTK双引擎"""
     
@@ -26,16 +29,15 @@ class EnhancedCanvasWidget(QWidget):
         """设置用户界面"""
         layout = QVBoxLayout(self)
         
-        # 获取图标路径
-        icon_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'resources', 'icons')
-        
         # 引擎选择面板
         engine_panel = QHBoxLayout()
         engine_panel.setSpacing(10)  # 增加间距
-        
-        # 添加可视化引擎图标和标签
+
+        # 添加可视化引擎图标和标签 - 使用资源管理器
         engine_icon = QLabel()
-        engine_icon.setPixmap(QIcon(os.path.join(icon_path, '可视化引擎.png')).pixmap(24, 24))  # 放大图标
+        engine_icon_path = safe_get_icon_path('可视化引擎.png')
+        if engine_icon_path:
+            engine_icon.setPixmap(QIcon(engine_icon_path).pixmap(24, 24))  # 放大图标
         engine_panel.addWidget(engine_icon)
         
         engine_label = QLabel("可视化引擎:")
@@ -55,9 +57,11 @@ class EnhancedCanvasWidget(QWidget):
         
         engine_panel.addStretch()
         
-        # 导出按钮
+        # 导出按钮 - 使用资源管理器
         export_btn = QPushButton("导出高质量图像")
-        export_btn.setIcon(QIcon(os.path.join(icon_path, '导出高质量图像.png')))
+        export_icon_path = safe_get_icon_path('导出高质量图像.png')
+        if export_icon_path:
+            export_btn.setIcon(QIcon(export_icon_path))
         export_btn.setIconSize(QSize(20, 20))  # 设置按钮图标大小
         export_btn.setMinimumHeight(35)  # 增加按钮高度
         export_btn.setFont(font)
